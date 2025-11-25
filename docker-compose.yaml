@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:17
+    container_name: gymmanager-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Fudbal1234
+      POSTGRES_DB: gymmanager
+    volumes:
+      - ./server/init/db:/docker-entrypoint-initdb.d
+      - gymmanager-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: gymmanager-backend
+    restart: always
+    environment:
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: Fudbal1234
+      DATABASE_NAME: gymmanager
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: npm run start:prod
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: gymmanager-frontend
+    restart: always
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  gymmanager-data:
