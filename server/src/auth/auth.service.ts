@@ -34,11 +34,14 @@ export class AuthService {
     );
     if (!isPasswordValid)
       throw new UnauthorizedException('invalid credentials');
-    const token = await this.jwtService.signAsync({ userId: foundUser.id });
+    const token = await this.jwtService.signAsync({
+      userId: foundUser.id,
+      role: foundUser.role,
+    });
     const refreshToken = await this.jwtService.signAsync(
       {
         userId: foundUser.id,
-        role: foundUser.roles,
+        role: foundUser.role,
       },
       {
         secret: this.configService.get('REFRESH_TOKEN_SECRET'),
@@ -66,7 +69,6 @@ export class AuthService {
       const token = await this.jwtService.signAsync({ userId: foundUser.id });
       return { token };
     } catch (error) {
-      console.log(error);
       throw new ForbiddenException();
     }
   }
@@ -77,7 +79,6 @@ export class AuthService {
       });
       await this.usersService.deleteRefreshToken(userId, refreshToken);
     } catch (error) {
-      console.log(error);
       throw new BadRequestException("couldn't logout user");
     }
   }

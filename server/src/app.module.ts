@@ -9,14 +9,23 @@ import { WorkoutExercisesModule } from './workout-exercises/workout-exercises.mo
 import { FoodModule } from './food/food.module';
 import { PlansModule } from './plans/plans.module';
 import { AuthModule } from './auth/auth.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({
-    isGlobal: true,
-    envFilePath: '.env'
-  }), UsersModule, ExercisesModule, WorkoutModule, WorkoutExercisesModule, FoodModule, PlansModule, AuthModule,
-  
-],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+    DatabaseModule,
+    UsersModule,
+    ExercisesModule,
+    WorkoutModule,
+    WorkoutExercisesModule,
+    FoodModule,
+    PlansModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -55,7 +55,7 @@ export class User {
     default: roleType.USER,
   })
   role: roleType;
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'date', name: 'birth_date', nullable: true })
   birthDate: Date;
   @Column({
     type: 'enum',
@@ -76,6 +76,7 @@ export class User {
     array: true,
     default: [],
     nullable: true,
+    name: 'refresh_tokens',
   })
   refreshTokens: string[];
   @OneToMany(() => Food, (food) => food.userId)
