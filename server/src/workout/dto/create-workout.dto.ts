@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsDateString,
   IsNotEmpty,
   IsNumber,
@@ -21,13 +22,9 @@ export class CreateWorkoutDto {
   @IsDateString()
   date: string;
   @IsUUID()
-  userId: string;
+  userId?: string;
   @IsOptional()
-  workoutExercises?: {
-    exerciseId: string;
-    sets: number;
-    reps: number;
-    weightKg?: number;
-    restSeconds?: number;
-  }[];
+  @IsArray()
+  @IsUUID('4', { each: true })
+  workoutExercises?: string[];
 }

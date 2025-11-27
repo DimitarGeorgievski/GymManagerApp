@@ -1,8 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { FoodService } from './food.service';
 import { CreateFoodDto } from './dto/create-food.dto';
 import { UpdateFoodDto } from './dto/update-food.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { RoleGuard } from 'src/auth/role.guard';
+import { Roles } from 'src/auth/role.decorator';
+import { roleType } from 'src/users/enum/user.enum';
 
+@UseGuards(AuthGuard, RoleGuard)
+@Roles(roleType.ADMIN, roleType.TRAINER)
 @Controller('food')
 export class FoodController {
   constructor(private readonly foodService: FoodService) {}
@@ -12,15 +27,18 @@ export class FoodController {
     return this.foodService.create(createFoodDto);
   }
 
+  @Roles(roleType.USER)
   @Get()
   findAll() {
     return this.foodService.findAll();
   }
 
+  @Roles(roleType.USER)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.foodService.findOne(id);
   }
+  @Roles(roleType.USER)
   @Get('/name/:name')
   findOneByName(@Param('name') name: string) {
     return this.foodService.findOneByName(name);

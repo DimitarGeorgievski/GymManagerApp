@@ -63,7 +63,7 @@ export class WorkoutService {
       Object.assign(foundWorkout, data);
       await this.workoutRepo.save({
         ...data,
-        User: { id: data.userId },
+        userId: { id: data.userId },
         workoutExercises: data.workoutExercises?.map((id) => ({ id })),
       });
     } catch (error) {
