@@ -19,16 +19,20 @@ export class FoodController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.foodService.findOne(+id);
+    return this.foodService.findOne(id);
+  }
+  @Get('/name/:name')
+  findOneByName(@Param('name') name: string) {
+    return this.foodService.findOneByName(name);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateFoodDto: UpdateFoodDto) {
-    return this.foodService.update(+id, updateFoodDto);
+    return this.foodService.update(id, updateFoodDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.foodService.remove(+id);
+    return this.foodService.remove(id);
   }
 }

@@ -1,26 +1,76 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DuplicateCodes } from 'src/duplicateCodes';
+import { Repository } from 'typeorm';
+import { Exercise } from './entities/exercise.entity';
 
 @Injectable()
 export class ExercisesService {
-  create(createExerciseDto: CreateExerciseDto) {
-    return 'This action adds a new exercise';
+  constructor(
+    @InjectRepository(Exercise) private exerciseRepo: Repository<Exercise>,
+  ) {}
+  async create(createData: CreateExerciseDto) {
+    try {
+      const foundExercise = await this.findOneByName(createData.name);
+      if (foundExercise)
+        throw new BadRequestException('Exercise with this name already exists');
+      const newExercise = await this.exerciseRepo.save(createData);
+      return newExercise;
+    } catch (error) {
+      if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
+        throw new BadRequestException(
+          'Exercise with these informations already exist',
+        );
+      throw new InternalServerErrorException(error.messsage);
+    }
   }
 
   findAll() {
-    return `This action returns all exercises`;
+    return this.exerciseRepo.find({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} exercise`;
+  async findOne(id: string) {
+    try {
+      const foundExercise = await this.exerciseRepo.findOneByOrFail({ id });
+      return foundExercise;
+    } catch (error) {
+      throw new NotFoundException('Exercise not found');
+    }
   }
-
-  update(id: number, updateExerciseDto: UpdateExerciseDto) {
-    return `This action updates a #${id} exercise`;
+  async findOneByName(name: string) {
+    const foundExercise = await this.exerciseRepo.findOne({
+      where: { name },
+      relations: {
+        workoutExercises: true,
+      },
+    });
+    if (!foundExercise)
+      throw new NotFoundException("Exercise with this name doesn't exist");
+    return foundExercise;
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} exercise`;
+  async update(id: string, data: UpdateExerciseDto) {
+    try {
+      const foundExercise = await this.findOne(id);
+      Object.assign(foundExercise, data);
+      await this.exerciseRepo.save({
+        ...data,
+      });
+    } catch (error) {
+      if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
+        throw new BadRequestException('Got Issue with updating this Exercise');
+      throw new InternalServerErrorException(error.messsage);
+    }
+  }
+  async remove(id: string) {
+    const foundExercise = await this.findOne(id);
+    if (!foundExercise) throw new NotFoundException('Exercise not Found');
+    return this.exerciseRepo.remove(foundExercise);
   }
 }
