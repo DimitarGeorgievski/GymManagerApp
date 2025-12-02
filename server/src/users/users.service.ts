@@ -19,7 +19,10 @@ export class UsersService {
       const foundUser = await this.findOneByEmail(createData.email);
       if (foundUser)
         throw new BadRequestException('User with this email already exists');
-      const newUser = await this.usersRepo.save(createData);
+      const newUser = await this.usersRepo.save({
+        ...createData,
+        refreshTokens: []
+      });
       return newUser;
     } catch (error) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
@@ -43,16 +46,9 @@ export class UsersService {
     }
   }
   async findOneByEmail(email: string) {
-    const foundUser = await this.usersRepo.findOne({
+    return this.usersRepo.findOne({
       where: { email },
-      relations: {
-        workouts: true,
-        foods: true,
-        plans: true,
-      },
     });
-    if(!foundUser) throw new NotFoundException("user with this email doesn't exist");
-    return foundUser
   }
   async update(id: string, data: UpdateUserDto) {
     try {

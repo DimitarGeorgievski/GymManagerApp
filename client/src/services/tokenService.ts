@@ -1,5 +1,5 @@
 let accessToken: string | null = null;
-// in all of these projects, tokens are in localStorage beacuse they are local projects, 
+// in all of these projects, tokens are in localStorage beacuse they are local projects,
 // if i would make it to prod someday it would be in http only cookie for more protection 😀
 export const tokenService = {
   setTokens: (access: string, refresh: string) => {
@@ -8,9 +8,7 @@ export const tokenService = {
     localStorage.setItem("refreshToken", refresh);
   },
   getAccessToken: () => {
-    if (!accessToken) {
-      accessToken = localStorage.getItem("accessToken");
-    }
+    if (!accessToken) accessToken = localStorage.getItem("accessToken");
     return accessToken;
   },
   getRefreshToken: () => localStorage.getItem("refreshToken"),

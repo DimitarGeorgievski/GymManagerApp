@@ -75,7 +75,6 @@ export class User {
   @Column('text', {
     array: true,
     default: [],
-    nullable: true,
     name: 'refresh_tokens',
   })
   refreshTokens: string[];

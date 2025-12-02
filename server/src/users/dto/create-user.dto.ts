@@ -9,7 +9,7 @@ import {
   Max,
   IsDateString,
 } from 'class-validator';
-import { Gender, roleType } from '../enum/user.enum';
+import { Gender } from '../enum/user.enum';
 
 export class CreateUserDto {
   @IsString()
@@ -34,9 +34,6 @@ export class CreateUserDto {
   @Min(100)
   @Max(250)
   heightCm: number;
-  @IsEnum(roleType)
-  @IsOptional()
-  role?: roleType;
   @IsDateString()
   @IsOptional()
   birthDate?: string;
