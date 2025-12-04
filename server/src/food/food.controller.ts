@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { FoodService } from './food.service';
 import { CreateFoodDto } from './dto/create-food.dto';
@@ -37,6 +38,11 @@ export class FoodController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.foodService.findOne(id);
+  }
+  @Roles(roleType.USER)
+  @Get('/foodSummary/:id')
+  getTodaysNutrition(@Req() req) {
+    return this.foodService.getTodaysNutrition(req.user.id);
   }
   @Roles(roleType.USER)
   @Get('/name/:name')

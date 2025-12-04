@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { WorkoutService } from './workout.service';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
@@ -38,11 +39,16 @@ export class WorkoutController {
   findOne(@Param('id') id: string) {
     return this.workoutService.findOne(id);
   }
-  
+
   @Roles(roleType.USER)
   @Get('/title/:title')
   findOneByTitle(@Param('title') title: string) {
     return this.workoutService.findOne(title);
+  }
+  @Roles(roleType.USER)
+  @Get('/workouts/:id')
+  getTodaysWorkouts(@Req() req) {
+    return this.workoutService.getTodaysWorkouts(req.user.id);
   }
 
   @Patch(':id')

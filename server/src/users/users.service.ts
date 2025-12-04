@@ -39,7 +39,14 @@ export class UsersService {
 
   async findOne(id: string) {
     try {
-      const foundUser = await this.usersRepo.findOneByOrFail({ id });
+      const foundUser = await this.usersRepo.findOneOrFail({ 
+        where: {id},
+        relations: {
+          foods: true,
+          plans: true,
+          workouts: true,
+        }
+       });
       return foundUser;
     } catch (error) {
       throw new NotFoundException('User not found');
@@ -48,6 +55,11 @@ export class UsersService {
   async findOneByEmail(email: string) {
     return this.usersRepo.findOne({
       where: { email },
+      relations: {
+        foods: true,
+        plans: true,
+        workouts: true,
+      }
     });
   }
   async update(id: string, data: UpdateUserDto) {

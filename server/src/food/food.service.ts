@@ -8,7 +8,7 @@ import { CreateFoodDto } from './dto/create-food.dto';
 import { UpdateFoodDto } from './dto/update-food.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DuplicateCodes } from 'src/duplicateCodes';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { Food } from './entities/food.entity';
 
 @Injectable()
@@ -32,7 +32,18 @@ export class FoodService {
       throw new InternalServerErrorException(error.messsage);
     }
   }
-
+  async getTodaysNutrition(userId: string) {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+    return this.foodRepo.find({
+      where: {
+        userId: { id: userId },
+        createdAt: Between(start, end),
+      },
+    });
+  }
   findAll() {
     return this.foodRepo.find({});
   }

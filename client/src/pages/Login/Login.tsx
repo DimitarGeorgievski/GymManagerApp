@@ -5,7 +5,7 @@ import type { loginUserReq } from "../../models/user.model";
 import { toast, ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { tokenService } from "../../services/tokenService";
-import { useUserStore } from "../../store/useUser";
+import { useUserStore } from "../../store/useUserStore";
 
 export function Login() {
   const navigate = useNavigate();
@@ -26,17 +26,17 @@ export function Login() {
     reValidateMode: "onChange",
     mode: "onBlur",
   });
-  const setUser = useUserStore((state) => state.setUser)
+  const setUser = useUserStore((state) => state.setUser);
   const onSubmit = async (data: loginUserReq) => {
     try {
       const response = await api.post("/auth/login", data);
       console.log(response);
       const { accessToken, refreshToken, user } = response.data;
       navigate("/");
-      console.log("access", tokenService.getAccessToken())
-      console.log("refresh", tokenService.getRefreshToken())
+      console.log("access", tokenService.getAccessToken());
+      console.log("refresh", tokenService.getRefreshToken());
       tokenService.setTokens(accessToken, refreshToken);
-      setUser(user)
+      setUser(user);
       toast.success("Successfully logged in");
       return user;
     } catch (error) {

@@ -1,5 +1,8 @@
-import { useUserStore } from "./useUser"
+import { useExerciseStore } from "./useExerciseStore";
+import { useUserStore } from "./useUserStore";
 
 export const useStores = () => ({
-    user: useUserStore(),
-})
+  user: useUserStore(),
+  exercise: useExerciseStore(),
+  
+});

@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
   db:
     image: postgres:17
@@ -18,29 +19,35 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
   backend:
     build:
       context: ./server
-      dockerfile: Dockerfile
-    container_name: gymmanager-backend
-    restart: always
-    env_file:
-      - ./server/.env
+      dockerfile: dockerfile.dev
+    container_name: gymmanager-backend-dev
+    volumes:
+      - ./server:/app
+      - /app/node_modules
     ports:
       - "3000:3000"
+    env_file:
+      - ./server/.env
     depends_on:
       db:
         condition: service_healthy
-    command: npm run start:prod
+
   frontend:
     build:
       context: ./client
-      dockerfile: Dockerfile
-    container_name: gymmanager-frontend
-    restart: always
+      dockerfile: dockerfile.dev
+    container_name: gymmanager-frontend-dev
+    volumes:
+      - ./client:/app
+      - /app/node_modules
     ports:
       - "5173:5173"
     depends_on:
       - backend
+
 volumes:
   gymmanager-data:

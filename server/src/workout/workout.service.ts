@@ -46,6 +46,16 @@ export class WorkoutService {
       throw new NotFoundException('Workout not found');
     }
   }
+  async getTodaysWorkouts(userId: string) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return this.workoutRepo.find({
+      where: {
+        userId: { id: userId },
+        date: today,
+      },
+    });
+  }
   async findOneByTitle(title: string) {
     const foundWorkout = await this.workoutRepo.findOne({
       where: { title },
