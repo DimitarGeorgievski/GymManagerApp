@@ -40,7 +40,7 @@ export class FoodController {
     return this.foodService.findOne(id);
   }
   @Roles(roleType.USER)
-  @Get('/foodSummary/:id')
+  @Get('/nutrition/today')
   getTodaysNutrition(@Req() req) {
     return this.foodService.getTodaysNutrition(req.user.id);
   }

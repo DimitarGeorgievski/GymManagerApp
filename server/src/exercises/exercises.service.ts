@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DuplicateCodes } from 'src/duplicateCodes';
 import { Repository } from 'typeorm';
 import { Exercise } from './entities/exercise.entity';
+import { ExerciseFilterDto } from './dto/filter-exercise.dto';
 
 @Injectable()
 export class ExercisesService {
@@ -32,8 +33,18 @@ export class ExercisesService {
     }
   }
 
-  findAll() {
-    return this.exerciseRepo.find({});
+  findAll(filters: ExerciseFilterDto) {
+    const queryBuilder = this.exerciseRepo.createQueryBuilder();
+    if (filters.name)
+      queryBuilder.andWhere('exercise.name ILIKE :name', {
+        name: `%${filters.name}%`,
+      });
+    if (filters.muscleGroup)
+      queryBuilder.andWhere('exercise.muscleGroup = :mg', {
+        mg: filters.muscleGroup,
+      });
+    queryBuilder.skip(filters.skip).take(filters.take);
+    return queryBuilder.getMany();
   }
 
   async findOne(id: string) {

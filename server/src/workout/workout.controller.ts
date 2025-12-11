@@ -46,7 +46,7 @@ export class WorkoutController {
     return this.workoutService.findOne(title);
   }
   @Roles(roleType.USER)
-  @Get('/workouts/:id')
+  @Get('/workouts/today')
   getTodaysWorkouts(@Req() req) {
     return this.workoutService.getTodaysWorkouts(req.user.id);
   }

@@ -29,9 +29,9 @@ export function Login() {
   const setUser = useUserStore((state) => state.setUser);
   const onSubmit = async (data: loginUserReq) => {
     try {
-      const response = await api.post("/auth/login", data);
-      console.log(response);
-      const { accessToken, refreshToken, user } = response.data;
+      const loggedUser = await api.post("/auth/login", data);
+      console.log(loggedUser);
+      const { accessToken, refreshToken, user } = loggedUser.data;
       navigate("/");
       console.log("access", tokenService.getAccessToken());
       console.log("refresh", tokenService.getRefreshToken());

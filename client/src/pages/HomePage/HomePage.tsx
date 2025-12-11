@@ -1,15 +1,20 @@
 import { useDateInfo } from "../../hooks/useDateInfo";
-import { useUserStore } from "../../store/useUserStore";
+// import { useUserStore } from "../../store/useUserStore";
 
 export function HomePage() {
+  document.title = "Home";
   const { dayName, day, month, year, date } = useDateInfo();
-  const { user } = useUserStore();
+  // const { user } = useUserStore();
+  // const todayWorkout = user?.workouts.find(
+  //   (w) => new Date(w.date).setHours(0, 0, 0, 0) === date.setHours(0, 0, 0, 0)
+  // );
+  // const todaysFoods = user?.foods.filter((f) => {
+  //   const foodDate = new Date(f.).setHours(0, 0, 0, 0);
+  //   return foodDate === date.setHours(0, 0, 0, 0);
+  // });
   console.log([dayName, "ab", day, "abc", month, "ac", year, "dc", date]);
-  const userWorkouts = user?.workouts;
-  const userFoods = user?.foods;
-  const todayWorkout = user?.workouts.find((w) => w.date === date);
   return (
-    <div className="p-6 gap-3 w-full">
+    <div className="p-6 w-full">
       <div className="flex flex-col gap-1 text-center pb-12">
         <h1 className="text-center text-3xl font-bold">Dashboard Overview</h1>
         <p className="text-gray-600">

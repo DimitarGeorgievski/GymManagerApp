@@ -8,7 +8,7 @@ import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DuplicateCodes } from 'src/duplicateCodes';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { Workout } from './entities/workout.entity';
 
 @Injectable()
@@ -47,13 +47,16 @@ export class WorkoutService {
     }
   }
   async getTodaysWorkouts(userId: string) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
     return this.workoutRepo.find({
       where: {
         userId: { id: userId },
-        date: today,
+        date: Between(start, end),
       },
+      relations: ['workoutExercises', 'workoutExercises.exercise'],
     });
   }
   async findOneByTitle(title: string) {
