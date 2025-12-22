@@ -10,6 +10,8 @@ import { FoodPage } from "./pages/FoodPage/FoodPage";
 import { PlanPage } from "./pages/PlansPage/PlansPage";
 import { WorkoutPage } from "./pages/WorkoutPage/WorkoutPage";
 import { ExercisePage } from "./pages/ExercisePage/ExercisePage";
+import { CreateExercise } from "./pages/CreateExercisePage/CreateExercisePage";
+import { CreateFood } from "./pages/CreateFoodPage/CreateFoodPage";
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
           <Route path="/food" element={<FoodPage />} />
           <Route path="/plan" element={<PlanPage />} />
           <Route path="/workout" element={<WorkoutPage />} />
+          <Route path="/exercise/create" element={<CreateExercise />} />
+          <Route path="/food/create" element={<CreateFood />} />
         </Route>
       </Route>
       <Route path="*" element={<ErrorPage />} />

@@ -1,7 +1,7 @@
 export enum roleType{
-    USER = 'user',
-    ADMIN = 'admin',
-    TRAINER = 'trainer',
+    USER = 'USER',
+    ADMIN = 'ADMIN',
+    TRAINER = 'TRAINER',
 }
 export enum Gender{
     MALE = 'male',

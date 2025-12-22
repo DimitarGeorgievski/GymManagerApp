@@ -66,7 +66,10 @@ export class AuthService {
         (token) => token === refreshToken,
       );
       if (!tokenExist) throw new Error();
-      const token = await this.jwtService.signAsync({ userId: foundUser.id });
+      const token = await this.jwtService.signAsync({
+        userId: foundUser.id,
+        role: foundUser.role,
+      });
       return { token };
     } catch (error) {
       throw new ForbiddenException();

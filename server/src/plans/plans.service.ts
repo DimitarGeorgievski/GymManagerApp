@@ -29,7 +29,7 @@ export class PlansService {
         throw new BadRequestException(
           'Plan with these informations already exist',
         );
-      throw new InternalServerErrorException(error.messsage);
+      throw new InternalServerErrorException(error.message);
     }
   }
 
@@ -65,7 +65,7 @@ export class PlansService {
     } catch (error) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException('Got Issue with updating this plan');
-      throw new InternalServerErrorException(error.messsage);
+      throw new InternalServerErrorException(error.message);
     }
   }
   async remove(id: string) {

@@ -1,3 +1,5 @@
+import type { Food } from "./food.model";
+
 export interface loginUserReq {
   email: string;
   password: string;
@@ -14,6 +16,7 @@ export interface RegisterUserReq {
   gender?: Gender;
 }
 export interface User {
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -30,20 +33,13 @@ export interface User {
   workouts: Workout[];
 }
 export enum roleType {
-  USER = "user",
-  ADMIN = "admin",
-  TRAINER = "trainer",
+  USER = "USER",
+  ADMIN = "ADMIN",
+  TRAINER = "TRAINER",
 }
 export enum Gender {
   MALE = "male",
   FEMALE = "female",
-}
-export interface Food {
-  name: string;
-  calories: number;
-  protein: number;
-  carbs: number;
-  fats: number;
 }
 export interface Plans {
   title: string;

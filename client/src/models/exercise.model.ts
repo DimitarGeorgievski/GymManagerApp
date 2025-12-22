@@ -17,3 +17,10 @@ export interface Exercise {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface CreateExerciseReq {
+  name: string;
+  muscleGroup: MuscleGroup;
+  equipment?: string;
+  description: string;
+}

@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -9,7 +10,9 @@ import {
 import { Exercise } from 'src/exercises/entities/exercise.entity';
 import { Workout } from 'src/workout/entities/workout.entity';
 
-@Entity()
+@Entity({
+  name: 'workout_exercises'
+})
 export class WorkoutExercise {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -30,7 +33,9 @@ export class WorkoutExercise {
   })
   updatedAt: Date;
   @ManyToOne(() => Workout, (workout) => workout.workoutExercises)
+  @JoinColumn({ name: 'exercise_id' })
   workout: Workout;
   @ManyToOne(() => Exercise, (exercise) => exercise.workoutExercises)
+  @JoinColumn({ name: 'exercise_id' })
   exercise: Exercise;
 }

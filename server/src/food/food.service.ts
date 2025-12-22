@@ -29,7 +29,7 @@ export class FoodService {
         throw new BadRequestException(
           'Food with these informations already exist',
         );
-      throw new InternalServerErrorException(error.messsage);
+      throw new InternalServerErrorException(error.message);
     }
   }
   async getTodaysNutrition(userId: string) {
@@ -57,12 +57,13 @@ export class FoodService {
     }
   }
   async findOneByName(name: string) {
-    try {
-      const foundFood = await this.foodRepo.findOneByOrFail({ name });
-      return foundFood;
-    } catch (error) {
-      throw new NotFoundException('Food not found');
-    }
+    const foundFood = await this.foodRepo.findOne({
+      where: {name},
+      relations: {
+        userId: true
+      }
+    })
+    return foundFood || null
   }
 
   async update(id: string, data: UpdateFoodDto) {
@@ -76,7 +77,7 @@ export class FoodService {
     } catch (error) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException('Got Issue with updating this Food');
-      throw new InternalServerErrorException(error.messsage);
+      throw new InternalServerErrorException(error.message);
     }
   }
   async remove(id: string) {

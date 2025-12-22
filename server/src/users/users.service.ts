@@ -29,7 +29,7 @@ export class UsersService {
         throw new BadRequestException(
           'User with these informations already exist',
         );
-      throw new InternalServerErrorException(error.messsage);
+      throw new InternalServerErrorException(error.message);
     }
   }
 
@@ -70,7 +70,7 @@ export class UsersService {
     } catch (error) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException('Got Issue with updating this user');
-      throw new InternalServerErrorException(error.messsage);
+      throw new InternalServerErrorException(error.message);
     }
   }
   async remove(id: string) {

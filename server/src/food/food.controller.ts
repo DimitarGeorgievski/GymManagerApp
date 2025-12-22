@@ -18,43 +18,42 @@ import { Roles } from 'src/auth/role.decorator';
 import { roleType } from 'src/users/enum/user.enum';
 
 @UseGuards(AuthGuard, RoleGuard)
-@Roles(roleType.ADMIN, roleType.TRAINER)
 @Controller('food')
 export class FoodController {
   constructor(private readonly foodService: FoodService) {}
-
+  @Roles(roleType.USER,roleType.ADMIN, roleType.TRAINER)
   @Post()
   create(@Body() createFoodDto: CreateFoodDto) {
     return this.foodService.create(createFoodDto);
   }
-
-  @Roles(roleType.USER)
+  @Roles(roleType.USER,roleType.ADMIN, roleType.TRAINER)
   @Get()
   findAll() {
     return this.foodService.findAll();
   }
 
-  @Roles(roleType.USER)
+    @Roles(roleType.USER,roleType.ADMIN, roleType.TRAINER)
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.foodService.findOne(id);
   }
-  @Roles(roleType.USER)
+    @Roles(roleType.USER,roleType.ADMIN, roleType.TRAINER)
   @Get('/nutrition/today')
   getTodaysNutrition(@Req() req) {
     return this.foodService.getTodaysNutrition(req.user.id);
   }
-  @Roles(roleType.USER)
+    @Roles(roleType.USER,roleType.ADMIN, roleType.TRAINER)
   @Get('/name/:name')
   findOneByName(@Param('name') name: string) {
     return this.foodService.findOneByName(name);
   }
-
+  @Roles(roleType.ADMIN, roleType.TRAINER)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateFoodDto: UpdateFoodDto) {
     return this.foodService.update(id, updateFoodDto);
   }
-
+  @Roles(roleType.USER,roleType.ADMIN, roleType.TRAINER)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.foodService.remove(id);

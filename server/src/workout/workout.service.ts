@@ -32,7 +32,7 @@ export class WorkoutService {
         throw new BadRequestException(
           'Workout with these informations already exist',
         );
-      throw new InternalServerErrorException(error.messsage);
+      throw new InternalServerErrorException(error.message);
     }
   }
   findAll() {
@@ -82,7 +82,7 @@ export class WorkoutService {
     } catch (error) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException('Got Issue with updating this Workout');
-      throw new InternalServerErrorException(error.messsage);
+      throw new InternalServerErrorException(error.message);
     }
   }
   async remove(id: string) {

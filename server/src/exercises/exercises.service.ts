@@ -25,16 +25,17 @@ export class ExercisesService {
       const newExercise = await this.exerciseRepo.save(createData);
       return newExercise;
     } catch (error) {
+      console.log(error)
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException(
           'Exercise with these informations already exist',
         );
-      throw new InternalServerErrorException(error.messsage);
+      throw new InternalServerErrorException(error.message);
     }
   }
 
   findAll(filters: ExerciseFilterDto) {
-    const queryBuilder = this.exerciseRepo.createQueryBuilder();
+    const queryBuilder = this.exerciseRepo.createQueryBuilder('exercise');
     if (filters.name)
       queryBuilder.andWhere('exercise.name ILIKE :name', {
         name: `%${filters.name}%`,
@@ -62,9 +63,7 @@ export class ExercisesService {
         workoutExercises: true,
       },
     });
-    if (!foundExercise)
-      throw new NotFoundException("Exercise with this name doesn't exist");
-    return foundExercise;
+    return foundExercise || null;
   }
   async update(id: string, data: UpdateExerciseDto) {
     try {
@@ -76,7 +75,7 @@ export class ExercisesService {
     } catch (error) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException('Got Issue with updating this Exercise');
-      throw new InternalServerErrorException(error.messsage);
+      throw new InternalServerErrorException(error.message);
     }
   }
   async remove(id: string) {

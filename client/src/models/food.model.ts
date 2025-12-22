@@ -9,3 +9,10 @@ export interface Food {
   updatedAt: string;
   userId: string;
 }
+export interface CreateFoodReq {
+  name: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fats: number;
+}

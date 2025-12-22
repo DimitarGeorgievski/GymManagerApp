@@ -19,33 +19,32 @@ import { roleType } from 'src/users/enum/user.enum';
 import { ExerciseFilterDto } from './dto/filter-exercise.dto';
 
 @UseGuards(AuthGuard, RoleGuard)
-@Roles(roleType.ADMIN, roleType.TRAINER)
 @Controller('exercises')
 export class ExercisesController {
   constructor(private readonly exercisesService: ExercisesService) {}
-
+  // @Roles(roleType.USER)
+  @Roles(roleType.USER,roleType.TRAINER,roleType.ADMIN)
   @Post()
   create(@Body() createExerciseDto: CreateExerciseDto) {
     return this.exercisesService.create(createExerciseDto);
   }
-
   @Get()
-  @Roles(roleType.USER)
+  @Roles(roleType.USER,roleType.TRAINER,roleType.ADMIN)
   findAll(@Query() filters: ExerciseFilterDto) {
     return this.exercisesService.findAll(filters);
   }
-
-  @Roles(roleType.USER)
+  
+  @Roles(roleType.USER,roleType.TRAINER,roleType.ADMIN)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.exercisesService.findOne(id);
   }
-  @Roles(roleType.USER)
+  @Roles(roleType.USER,roleType.TRAINER,roleType.ADMIN)
   @Get('/name/:name')
   findOneByName(@Param('name') name: string) {
     return this.exercisesService.findOneByName(name);
   }
-
+  @Roles(roleType.ADMIN, roleType.TRAINER)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -53,7 +52,7 @@ export class ExercisesController {
   ) {
     return this.exercisesService.update(id, updateExerciseDto);
   }
-
+  @Roles(roleType.ADMIN, roleType.TRAINER)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.exercisesService.remove(id);

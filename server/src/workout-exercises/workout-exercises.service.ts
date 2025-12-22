@@ -22,16 +22,17 @@ export class WorkoutExercisesService {
     try {
       const newWorkout = await this.workoutExerciseRepo.save({
         ...createData,
-        workout: { id: createData.exerciseId },
+        workout: { id: createData.workoutId },
         exercise: { id: createData.exerciseId },
       });
       return newWorkout;
     } catch (error) {
+      console.log(error)
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException(
           'workout exercise with these informations already exist',
         );
-      throw new InternalServerErrorException(error.messsage);
+      throw new InternalServerErrorException(error.message);
     }
   }
   findAll() {
@@ -60,7 +61,7 @@ export class WorkoutExercisesService {
         throw new BadRequestException(
           'Got Issue with updating this workout exercise',
         );
-      throw new InternalServerErrorException(error.messsage);
+      throw new InternalServerErrorException(error.message);
     }
   }
   async remove(id: string) {

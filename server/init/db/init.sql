@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS "workout" (
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
-CREATE TABLE IF NOT EXISTS "workout_exercise" (
+CREATE TABLE IF NOT EXISTS "workout_exercises" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     sets INT NOT NULL,
     reps INT NOT NULL,
