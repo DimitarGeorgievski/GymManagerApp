@@ -24,8 +24,8 @@ export class PlansService {
         userId: { id: createPlanDto.userId },
       });
       return newPlan;
-    } catch (error) {
-      if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
+    } catch (error: any) {
+      if (error.error === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException(
           'Plan with these informations already exist',
         );
@@ -35,6 +35,15 @@ export class PlansService {
 
   findAll() {
     return this.plansRepo.find({});
+  }
+  findUserPlans(userId: string) {
+    return this.plansRepo.find({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+    });
   }
 
   async findOne(id: string) {
@@ -62,7 +71,7 @@ export class PlansService {
         ...data,
         userId: { id: data.userId },
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException('Got Issue with updating this plan');
       throw new InternalServerErrorException(error.message);

@@ -1,40 +1,41 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useExerciseStore } from "../../store/useExerciseStore";
 import { Link, useSearchParams } from "react-router-dom";
-import { MuscleGroup, type Exercise } from "../../models/exercise.model";
+import { MuscleGroup } from "../../models/exercise.model";
 import { ExerciseCard } from "../../Components/ExerciseCard/ExerciseCard";
 import { SearchInput } from "../../Components/SearchInput/SearchInput";
 
+document.title = "Exercise";
 export function ExercisePage() {
-  document.title = "Exercise";
   const { exercises, fetchExercises } = useExerciseStore();
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("q");
   const itemsPerPage = 3;
+  const filteredExercises = useMemo(
+  () =>
+    (exercises ?? []).filter((exercise) =>
+      exercise.name.toLowerCase().includes((searchQuery ?? "").toLowerCase()),
+    ),
+  [exercises, searchQuery],
+);
   const totalPages = Math.ceil(filteredExercises.length / itemsPerPage) || 1;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentExercises = filteredExercises.slice(
     startIndex,
-    startIndex + itemsPerPage
+    startIndex + itemsPerPage,
   );
   const onSearch = useCallback(
     (value: string) => {
       setSearchParams(value ? { q: value } : {});
-      setCurrentPage(1);
-      const filtered = (exercises ?? []).filter((e) =>
-        e.name.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredExercises(filtered);
     },
-    [exercises, setSearchParams]
+    [setSearchParams],
   );
   useEffect(() => {
     if (!exercises?.length) {
       fetchExercises();
     }
-  }, []);
+  }, [fetchExercises, exercises?.length]);
   useEffect(() => {
     if (searchQuery) onSearch(searchQuery);
   }, [searchQuery, onSearch]);

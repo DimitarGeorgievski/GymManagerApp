@@ -7,7 +7,6 @@ interface SearchInputProps {
 
 export function SearchInput({ onSearch, defaultValue }: SearchInputProps) {
   const [value, setValue] = useState(defaultValue || "");
-
   useEffect(() => {
     const timer = setTimeout(() => {
       onSearch(value);
@@ -20,7 +19,7 @@ export function SearchInput({ onSearch, defaultValue }: SearchInputProps) {
       <input
         type="text"
         value={value}
-        placeholder="Search by product name..."
+        placeholder="Search by name..."
         onChange={(e) => setValue(e.target.value)}
       />
     </div>

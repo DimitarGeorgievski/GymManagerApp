@@ -12,6 +12,7 @@ import { WorkoutPage } from "./pages/WorkoutPage/WorkoutPage";
 import { ExercisePage } from "./pages/ExercisePage/ExercisePage";
 import { CreateExercise } from "./pages/CreateExercisePage/CreateExercisePage";
 import { CreateFood } from "./pages/CreateFoodPage/CreateFoodPage";
+import { CreatePlan } from "./pages/CreatePlanPage/CreatePlanPage";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="/plan" element={<PlanPage />} />
           <Route path="/workout" element={<WorkoutPage />} />
           <Route path="/exercise/create" element={<CreateExercise />} />
+          <Route path="/plan/create" element={<CreatePlan />} />
           <Route path="/food/create" element={<CreateFood />} />
         </Route>
       </Route>

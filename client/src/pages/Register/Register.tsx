@@ -14,12 +14,12 @@ import { toast, ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { Gender, type RegisterUserReq } from "../../models/user.model";
 
+document.title = "Register";
 export function Register() {
   const navigate = useNavigate();
   const onRegister = () => {
     navigate("/login");
   };
-  document.title = "Register";
   const {
     register,
     handleSubmit,
@@ -57,7 +57,8 @@ export function Register() {
       toast.success("Successfully registered");
       navigate("/");
       return user;
-    } catch (error) {
+    } catch (error: unknown) {
+      console.log(error)
       toast.error("There was a error logging, try again");
     }
   };

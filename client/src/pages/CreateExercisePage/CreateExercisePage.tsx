@@ -10,8 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store/useUserStore";
 import { roleType } from "../../models/user.model";
 
+document.title = "Create Exercise";
 export function CreateExercise() {
-  document.title = "Create Exercise";
   const navigate = useNavigate();
   const user = useUserStore((state) => state.user);
   const {
@@ -39,7 +39,8 @@ export function CreateExercise() {
       toast.success("Exercise created successfully");
       reset();
       navigate("/exercise");
-    } catch (error) {
+    } catch (error: unknown) {
+      console.log(error)
       toast.error("Failed to create exercise");
     }
   };

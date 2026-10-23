@@ -7,12 +7,12 @@ import { useForm } from "react-hook-form";
 import { tokenService } from "../../services/tokenService";
 import { useUserStore } from "../../store/useUserStore";
 
+document.title = "Login";
 export function Login() {
   const navigate = useNavigate();
   const onRegister = () => {
     navigate("/register");
   };
-  document.title = "Login";
   const {
     register,
     handleSubmit,
@@ -39,7 +39,8 @@ export function Login() {
       setUser(user);
       toast.success("Successfully logged in");
       return user;
-    } catch (error) {
+    } catch (error: unknown) {
+      console.log(error)
       toast.error("There was a error logging, try again");
     }
   };

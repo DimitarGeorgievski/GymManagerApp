@@ -3,16 +3,17 @@ import { Link, useSearchParams } from "react-router-dom";
 import { FoodCard } from "../../Components/FoodCard/FoodCard";
 import { useFoodStore } from "../../store/useFoodStore";
 import { SearchInput } from "../../Components/SearchInput/SearchInput";
-import type { Food } from "../../models/food.model";
 
+document.title = "Exercise";
 export function FoodPage() {
-  document.title = "Exercise";
   const { fetchFoods, foods } = useFoodStore();
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredFoods, setFilteredFoods] = useState<Food[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("q");
   const itemsPerPage = 3;
+    const filteredFoods = (foods ?? []).filter((foods) =>
+    foods.name.toLowerCase().includes((searchQuery ?? "").toLowerCase()),
+  );
   const totalPages = Math.ceil(filteredFoods.length / itemsPerPage) || 1;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentFoods = filteredFoods.slice(
@@ -22,22 +23,14 @@ export function FoodPage() {
   const onSearch = useCallback(
     (value: string) => {
       setSearchParams(value ? { q: value } : {});
-      setCurrentPage(1);
-      const filtered = (foods ?? []).filter((e) =>
-        e.name.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredFoods(filtered);
     },
-    [foods, setSearchParams]
+    [setSearchParams],
   );
   useEffect(() => {
     if (!foods?.length) {
       fetchFoods();
     }
-  }, []);
-  useEffect(() => {
-    if (searchQuery) onSearch(searchQuery);
-  }, [searchQuery, onSearch]);
+  }, [fetchFoods, foods?.length]);
   return (
     <div className="p-12">
       <h1 className="text-center text-3xl font-bold pb-12">Food Database</h1>

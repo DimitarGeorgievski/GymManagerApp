@@ -80,7 +80,7 @@ export class User {
   refreshTokens: string[];
   @OneToMany(() => Food, (food) => food.userId)
   foods: Food[];
-  @OneToMany(() => Plans, (plans) => plans.userId)
+  @OneToMany(() => Plans, (plans) => plans.user)
   plans: Plans[];
   @OneToMany(() => Workout, (workout) => workout.userId)
   workouts: Workout[];

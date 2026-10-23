@@ -35,5 +35,5 @@ export class Plans {
   updatedAt: Date;
   @ManyToOne(() => User, (user) => user.plans)
   @JoinColumn({ name: 'user_id' })
-  userId: User;
+  user: User;
 }

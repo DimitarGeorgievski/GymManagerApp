@@ -7,8 +7,8 @@ import { useUserStore } from "../../store/useUserStore";
 import { roleType } from "../../models/user.model";
 import type { CreateFoodReq } from "../../models/food.model";
 
+document.title = "Create Food";
 export function CreateFood() {
-  document.title = "Create Food";
   const navigate = useNavigate();
   const user = useUserStore((state) => state.user);
   const {
@@ -38,7 +38,8 @@ export function CreateFood() {
       toast.success("Food created successfully");
       reset();
       navigate("/food");
-    } catch (error) {
+    } catch (error: unknown) {
+      console.log(error);
       toast.error("Failed to create food");
     }
   };

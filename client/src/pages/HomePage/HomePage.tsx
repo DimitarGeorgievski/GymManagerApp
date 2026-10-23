@@ -1,15 +1,16 @@
 import { useDateInfo } from "../../hooks/useDateInfo";
 // import { useUserStore } from "../../store/useUserStore";
+// import { useUserStore } from "../../store/useUserStore";
 
+document.title = "Home";
 export function HomePage() {
-  document.title = "Home";
   const { dayName, day, month, year, date } = useDateInfo();
   // const { user } = useUserStore();
   // const todayWorkout = user?.workouts.find(
   //   (w) => new Date(w.date).setHours(0, 0, 0, 0) === date.setHours(0, 0, 0, 0)
   // );
   // const todaysFoods = user?.foods.filter((f) => {
-  //   const foodDate = new Date(f.).setHours(0, 0, 0, 0);
+  //   const foodDate = new Date(f.createdAt).setHours(0, 0, 0, 0);
   //   return foodDate === date.setHours(0, 0, 0, 0);
   // });
   console.log([dayName, "ab", day, "abc", month, "ac", year, "dc", date]);

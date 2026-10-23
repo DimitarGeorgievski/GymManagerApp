@@ -21,22 +21,27 @@ import { RoleGuard } from 'src/auth/role.guard';
 @Controller('plans')
 export class PlansController {
   constructor(private readonly plansService: PlansService) {}
-  
+  @Roles(roleType.USER)
   @Post()
   create(@Body() createPlanDto: CreatePlanDto) {
     return this.plansService.create(createPlanDto);
   }
-  
+
   @Roles(roleType.USER)
   @Get()
   findAll() {
     return this.plansService.findAll();
   }
-  
+
   @Roles(roleType.USER)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.plansService.findOne(id);
+  }
+  @Roles(roleType.USER)
+  @Get()
+  findUserPlans(id: string) {
+    return this.plansService.findUserPlans(id);
   }
   
   @Roles(roleType.USER)
