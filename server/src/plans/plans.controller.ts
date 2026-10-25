@@ -21,7 +21,6 @@ import { RoleGuard } from 'src/auth/role.guard';
 @Controller('plans')
 export class PlansController {
   constructor(private readonly plansService: PlansService) {}
-  @Roles(roleType.USER)
   @Post()
   create(@Body() createPlanDto: CreatePlanDto) {
     return this.plansService.create(createPlanDto);

@@ -21,7 +21,7 @@ export class PlansService {
         throw new BadRequestException('Plan with this title already exists');
       const newPlan = await this.plansRepo.save({
         ...createPlanDto,
-        userId: { id: createPlanDto.userId },
+        user: { id: createPlanDto.userId },
       });
       return newPlan;
     } catch (error: any) {
@@ -55,13 +55,8 @@ export class PlansService {
     }
   }
   async findOneByTitle(title: string) {
-    try {
-      const foundPlan = await this.plansRepo.findOneByOrFail({ title });
-      return foundPlan;
-    } catch (error) {
-      throw new NotFoundException('User not found');
+      return await this.plansRepo.findOneBy({ title });
     }
-  }
 
   async update(id: string, data: UpdatePlanDto) {
     try {
