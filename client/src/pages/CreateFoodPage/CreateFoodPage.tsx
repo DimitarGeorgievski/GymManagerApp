@@ -3,14 +3,11 @@ import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "../../store/useUserStore";
-import { roleType } from "../../models/user.model";
 import type { CreateFoodReq } from "../../models/food.model";
 
 document.title = "Create Food";
 export function CreateFood() {
   const navigate = useNavigate();
-  const user = useUserStore((state) => state.user);
   const {
     register,
     handleSubmit,
@@ -26,15 +23,9 @@ export function CreateFood() {
     },
     mode: "onBlur",
   });
-
   const onSubmit = async (data: CreateFoodReq) => {
-    if (user?.role === roleType.USER) {
-      toast.error("You are not a trainer. You cannot create Foods.");
-      return;
-    }
     try {
-      const FoodWithUser = {...data, userId: user?.id}
-      await api.post("/food", FoodWithUser);
+      await api.post("/food", data);
       toast.success("Food created successfully");
       reset();
       navigate("/food");
@@ -43,7 +34,6 @@ export function CreateFood() {
       toast.error("Failed to create food");
     }
   };
-
   return (
     <div className="min-h-screen bg-linear-to-b from-[#7f92ff] to-white flex items-center justify-center">
       <ToastContainer autoClose={2000} />

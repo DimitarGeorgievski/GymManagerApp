@@ -14,14 +14,14 @@ import { DuplicateCodes } from 'src/duplicateCodes';
 @Injectable()
 export class PlansService {
   constructor(@InjectRepository(Plans) private plansRepo: Repository<Plans>) {}
-  async create(createPlanDto: CreatePlanDto) {
+  async create(createPlanDto: CreatePlanDto, userId: string) {
     try {
       const foundPlan = await this.findOneByTitle(createPlanDto.title);
       if (foundPlan)
         throw new BadRequestException('Plan with this title already exists');
       const newPlan = await this.plansRepo.save({
         ...createPlanDto,
-        user: { id: createPlanDto.userId },
+        user: { id: userId },
       });
       return newPlan;
     } catch (error: any) {
@@ -64,7 +64,6 @@ export class PlansService {
       Object.assign(foundPlan, data);
       await this.plansRepo.save({
         ...data,
-        userId: { id: data.userId },
       });
     } catch (error: any) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)

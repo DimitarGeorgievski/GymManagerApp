@@ -14,6 +14,7 @@ export interface RegisterUserReq {
   heightCm: number;
   birthDate?: string;
   gender?: Gender;
+  role?: Exclude<roleType, roleType.ADMIN>;
 }
 export interface User {
   id: string;

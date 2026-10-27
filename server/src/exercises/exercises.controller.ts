@@ -22,7 +22,6 @@ import { ExerciseFilterDto } from './dto/filter-exercise.dto';
 @Controller('exercises')
 export class ExercisesController {
   constructor(private readonly exercisesService: ExercisesService) {}
-  // @Roles(roleType.USER)
   @Roles(roleType.USER,roleType.TRAINER,roleType.ADMIN)
   @Post()
   create(@Body() createExerciseDto: CreateExerciseDto) {

@@ -24,7 +24,7 @@ export class UsersService {
         refreshTokens: [],
       });
       return newUser;
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException(
           'User with these informations already exist',
@@ -67,7 +67,7 @@ export class UsersService {
       const foundUser = await this.findOne(id);
       Object.assign(foundUser, data);
       await this.usersRepo.save(data);
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException('Got Issue with updating this user');
       throw new InternalServerErrorException(error.message);
@@ -80,6 +80,7 @@ export class UsersService {
   }
   async saveRefreshToken(id: string, token: string) {
     const foundUser = await this.findOne(id);
+    foundUser.refreshTokens ??= [];
     foundUser.refreshTokens.push(token);
     await this.usersRepo.save(foundUser);
   }

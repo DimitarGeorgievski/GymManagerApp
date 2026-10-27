@@ -2,11 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { SearchInput } from "../../Components/SearchInput/SearchInput";
 import { usePlanStore } from "../../store/usePlanStore";
+import { useUserStore } from "../../store/useUserStore";
 import { PlanCard } from "../../Components/PlanCard/PlanCard";
+import { roleType } from "../../models/user.model";
 
 document.title = "Plan";
 export function PlanPage() {
   const { plans, fetchPlans } = usePlanStore();
+  const user = useUserStore((state) => state.user);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("q");
@@ -27,10 +30,8 @@ export function PlanPage() {
     [setSearchParams],
   );
   useEffect(() => {
-    if (!plans?.length) {
-      fetchPlans();
-    }
-  }, [fetchPlans, plans?.length]);
+    fetchPlans();
+  }, [fetchPlans]);
   return (
     <div className="p-12">
       <h1 className="text-center text-3xl font-bold pb-16">Plans Page</h1>
@@ -39,12 +40,14 @@ export function PlanPage() {
           <p>Filter By:</p>
           <SearchInput defaultValue={searchQuery} onSearch={onSearch} />
         </div>
-        <Link
-          to={"/plan/create"}
-          className="bg-blue-500 font-semibold text-white cursor-pointer p-2 rounded"
-        >
-          Create Plan
-        </Link>
+        {user?.role === roleType.TRAINER || user?.role === roleType.ADMIN && (
+          <Link
+            to={"/plan/create"}
+            className="bg-blue-500 font-semibold text-white cursor-pointer p-2 rounded"
+          >
+            Create Plan
+          </Link>
+        )}
       </div>
       <div className="grid grid-cols-3 gap-4">
         {currentPlans?.map((plan) => (

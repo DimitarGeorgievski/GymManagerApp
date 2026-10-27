@@ -7,12 +7,13 @@ import {
   Ruler,
   Calendar,
   User2,
+  Shield,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import { toast, ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { Gender, type RegisterUserReq } from "../../models/user.model";
+import { Gender, roleType, type RegisterUserReq } from "../../models/user.model";
 
 document.title = "Register";
 export function Register() {
@@ -31,6 +32,7 @@ export function Register() {
       lastName: "",
       birthDate: "",
       gender: Gender.MALE,
+      role: roleType.USER,
       heightCm: 0,
       phoneNumber: 0,
       weightKg: 0,
@@ -50,6 +52,8 @@ export function Register() {
         heightCm: Number(data?.heightCm),
         weightKg: Number(data?.weightKg),
         phoneNumber: data?.phoneNumber,
+        gender: data?.gender,
+        role: data?.role,
       };
       const response = await api.post("/auth/register", newUser);
       console.log(response);
@@ -259,6 +263,21 @@ export function Register() {
                 >
                   <option value="male">Male</option>
                   <option value="female">Female</option>
+                </select>
+              </div>
+              <div
+                className={`flex  p-2 items-center rounded-md bg-[#F1F5F9] gap-2 ${
+                  errors.role ? "border-2 border-red-500" : ""
+                }`}
+              >
+                <Shield color="#808080" />
+                <select
+                  id="RoleSelect"
+                  className="focus:outline-none  w-full  bg-[#F1F5F9]"
+                  {...register("role", { required: true })}
+                >
+                  <option value="USER">User</option>
+                  <option value="TRAINER">Trainer</option>
                 </select>
               </div>
             </div>

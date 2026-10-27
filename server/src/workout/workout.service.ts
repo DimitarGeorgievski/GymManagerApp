@@ -16,18 +16,22 @@ export class WorkoutService {
   constructor(
     @InjectRepository(Workout) private workoutRepo: Repository<Workout>,
   ) {}
-  async create(createData: CreateWorkoutDto) {
+  async create(createData: CreateWorkoutDto, userId: string) {
     try {
       const foundWorkout = await this.findOneByTitle(createData.title);
       if (foundWorkout)
         throw new BadRequestException('Workout with this name already exists');
       const newWorkout = await this.workoutRepo.save({
         ...createData,
-        userId: { id: createData.userId },
-        workoutExercises: createData.workoutExercises?.map((id) => ({ id })),
+        userId: { id: userId },
+        workoutExercises: createData.workoutExercises?.map((we) => ({
+          exerciseId: we.exerciseId,
+          sets: we.sets,
+          reps: we.reps,
+        })),
       });
       return newWorkout;
-    } catch (error) {
+    } catch (error:any) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException(
           'Workout with these informations already exist',
@@ -59,6 +63,24 @@ export class WorkoutService {
       relations: ['workoutExercises', 'workoutExercises.exercise'],
     });
   }
+  async getWeeklyWorkouts(userId: string) {
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const startOfWeek = new Date(today);
+    const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    startOfWeek.setDate(today.getDate() - daysToSubtract);
+    startOfWeek.setHours(0, 0, 0, 0);
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
+    return this.workoutRepo.find({
+      where: {
+        userId: { id: userId },
+        date: Between(startOfWeek, endOfWeek),
+      },
+      relations: ['workoutExercises', 'workoutExercises.exercise'],
+    });
+  }
   async findOneByTitle(title: string) {
     const foundWorkout = await this.workoutRepo.findOne({
       where: { title },
@@ -66,8 +88,6 @@ export class WorkoutService {
         workoutExercises: true,
       },
     });
-    if (!foundWorkout)
-      throw new NotFoundException("Workout with this name doesn't exist");
     return foundWorkout;
   }
   async update(id: string, data: UpdateWorkoutDto) {
@@ -76,10 +96,13 @@ export class WorkoutService {
       Object.assign(foundWorkout, data);
       await this.workoutRepo.save({
         ...data,
-        userId: { id: data.userId },
-        workoutExercises: data.workoutExercises?.map((id) => ({ id })),
+        workoutExercises: data.workoutExercises?.map((we) => ({
+          exerciseId: we.exerciseId,
+          sets: we.sets,
+          reps: we.reps,
+        })),
       });
-    } catch (error) {
+    } catch (error:any) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException('Got Issue with updating this Workout');
       throw new InternalServerErrorException(error.message);

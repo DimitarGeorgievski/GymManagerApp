@@ -23,8 +23,8 @@ export class FoodController {
   constructor(private readonly foodService: FoodService) {}
   @Roles(roleType.USER,roleType.ADMIN, roleType.TRAINER)
   @Post()
-  create(@Body() createFoodDto: CreateFoodDto) {
-    return this.foodService.create(createFoodDto);
+  create(@Body() createFoodDto: CreateFoodDto, @Req() req) {
+    return this.foodService.create(createFoodDto, req.user.id);
   }
   @Roles(roleType.USER,roleType.ADMIN, roleType.TRAINER)
   @Get()

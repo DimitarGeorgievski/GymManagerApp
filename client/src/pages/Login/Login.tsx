@@ -1,7 +1,7 @@
 import { Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
-import type { loginUserReq } from "../../models/user.model";
+import type { loginUserReq, User } from "../../models/user.model";
 import { toast, ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { tokenService } from "../../services/tokenService";
@@ -27,21 +27,19 @@ export function Login() {
     mode: "onBlur",
   });
   const setUser = useUserStore((state) => state.setUser);
-  const onSubmit = async (data: loginUserReq) => {
+  const onSubmit = async (data: loginUserReq): Promise<User | undefined> => {
     try {
-      const loggedUser = await api.post("/auth/login", data);
-      console.log(loggedUser);
-      const { accessToken, refreshToken, user } = loggedUser.data;
-      navigate("/");
-      console.log("access", tokenService.getAccessToken());
-      console.log("refresh", tokenService.getRefreshToken());
+      const response = await api.post("/auth/login", data);
+      const { accessToken, refreshToken, user } = response.data;
       tokenService.setTokens(accessToken, refreshToken);
       setUser(user);
       toast.success("Successfully logged in");
+      navigate("/");
       return user;
     } catch (error: unknown) {
-      console.log(error)
-      toast.error("There was a error logging, try again");
+      console.error(error);
+      toast.error("There was an error logging in, try again");
+      return undefined;
     }
   };
   return (

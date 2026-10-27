@@ -4,7 +4,7 @@ import { FoodCard } from "../../Components/FoodCard/FoodCard";
 import { useFoodStore } from "../../store/useFoodStore";
 import { SearchInput } from "../../Components/SearchInput/SearchInput";
 
-document.title = "Exercise";
+document.title = "Food";
 export function FoodPage() {
   const { fetchFoods, foods } = useFoodStore();
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +33,7 @@ export function FoodPage() {
   }, [fetchFoods, foods?.length]);
   return (
     <div className="p-12">
-      <h1 className="text-center text-3xl font-bold pb-12">Food Database</h1>
+      <h1 className="text-center text-3xl font-bold pb-12">Food Page</h1>
       <div className="flex justify-between items-center mb-6">
         <div className="flex gap-6 items-center">
           <p>Filter By:</p>

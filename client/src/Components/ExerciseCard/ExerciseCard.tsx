@@ -6,7 +6,7 @@ interface ExerciseCardProps {
 
 export function ExerciseCard({ exercise }: ExerciseCardProps) {
   return (
-    <div className="border rounded p-4 shadow-sm hover:shadow-xl transition hover:scale-101 ease-in cursor-pointer">
+    <div className="border bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl transition hover:scale-101 ease-in cursor-pointer">
       <h2 className="font-semibold text-lg">{exercise.name}</h2>
       <p className="text-sm text-gray-800">{exercise.description}</p>
       <div className="mt-2 flex justify-between text-md text-gray-800">

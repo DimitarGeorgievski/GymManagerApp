@@ -2,15 +2,12 @@ import { CalendarDays, FileText, ClipboardList } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "../../store/useUserStore";
-import { roleType } from "../../models/user.model";
 import type { CreatePlanReq } from "../../models/plan.model";
 import api from "../../services/api";
 
 document.title = "Create Plan";
 export function CreatePlan() {
   const navigate = useNavigate();
-  const user = useUserStore((state) => state.user);
   const {
     register,
     handleSubmit,
@@ -26,23 +23,13 @@ export function CreatePlan() {
     mode: "onBlur",
   });
   const onSubmit = async (data: CreatePlanReq) => {
-    if (user?.role === roleType.USER) {
-      toast.error("You are not a trainer. You cannot create plans.");
-      return;
-    }
-    if (!user?.id) {
-      toast.error("User information is missing. Please log in again.");
-      return;
-    }
     if (new Date(data.endDate) < new Date(data.startDate)) {
       toast.error("End date cannot be before start date.");
       return;
     }
     try {
-      console.log(user);
       await api.post("/plans", {
         ...data,
-        userId: user.id,
       });
       toast.success("Plan created successfully");
       reset();

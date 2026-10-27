@@ -33,6 +33,4 @@ export class CreateFoodDto {
   @IsNumber()
   @Min(0)
   fats: number;
-  @IsUUID()
-  userId: string;
 }

@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS "user" (
     gender VARCHAR(10),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
-    refresh_tokens TEXT[]
+    refresh_tokens TEXT[] NOT NULL DEFAULT '{}'
 );
 CREATE TABLE IF NOT EXISTS "exercise" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -74,7 +74,10 @@ CREATE TABLE IF NOT EXISTS "food" (
 );
 INSERT INTO "user"(first_name, last_name, email, phone_number, password, weight_kg, height_cm, role)
 VALUES
-('Dimitar', 'Georgievski', 'dimitar@example.com', '071123456', 'password', 80, 180, 'user');
+('Dimitar', 'Georgievski', 'dimitar@example.com', '071123456', '$2b$08$s5zTOtBbLaQy3GgFWhlRze4XPVbaVrNxH63ffFcinc/NbMxSrcBty', 80, 180, 'user');
+INSERT INTO "user"(first_name, last_name, email, phone_number, password, weight_kg, height_cm, role)
+VALUES
+('Dimitar1', 'Georgievski', 'dimitar1@example.com', '071123455', '$2b$08$s5zTOtBbLaQy3GgFWhlRze4XPVbaVrNxH63ffFcinc/NbMxSrcBty', 80, 180, 'TRAINER');
 INSERT INTO "exercise"(name, muscle_group, description)
 VALUES
 ('Bench Press', 'CHEST', 'Bench press description'),

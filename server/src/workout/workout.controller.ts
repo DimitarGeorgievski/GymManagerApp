@@ -24,8 +24,8 @@ export class WorkoutController {
   constructor(private readonly workoutService: WorkoutService) {}
 
   @Post()
-  create(@Body() createWorkoutDto: CreateWorkoutDto) {
-    return this.workoutService.create(createWorkoutDto);
+  create(@Body() createWorkoutDto: CreateWorkoutDto, @Req() req) {
+    return this.workoutService.create(createWorkoutDto, req.user.id);
   }
 
   @Roles(roleType.USER)
@@ -49,6 +49,12 @@ export class WorkoutController {
   @Get('/workouts/today')
   getTodaysWorkouts(@Req() req) {
     return this.workoutService.getTodaysWorkouts(req.user.id);
+  }
+
+  @Roles(roleType.USER)
+  @Get('/workouts/week')
+  getWeeklyWorkouts(@Req() req) {
+    return this.workoutService.getWeeklyWorkouts(req.user.id);
   }
 
   @Patch(':id')

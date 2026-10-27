@@ -9,7 +9,7 @@ import {
   Max,
   IsDateString,
 } from 'class-validator';
-import { Gender } from '../enum/user.enum';
+import { Gender, Role } from '../enum/user.enum';
 
 export class CreateUserDto {
   @IsString()
@@ -40,4 +40,7 @@ export class CreateUserDto {
   @IsEnum(Gender)
   @IsOptional()
   gender?: Gender;
+  @IsEnum(Role)
+  @IsOptional()
+  role?: Role;
 }

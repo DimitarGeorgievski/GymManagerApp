@@ -17,6 +17,4 @@ export class CreatePlanDto {
   startDate: string;
   @IsDateString()
   endDate: string;
-  @IsUUID()
-  userId: string;
 }

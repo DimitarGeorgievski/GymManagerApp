@@ -7,13 +7,10 @@ import {
   type CreateExerciseReq,
 } from "../../models/exercise.model";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "../../store/useUserStore";
-import { roleType } from "../../models/user.model";
 
 document.title = "Create Exercise";
 export function CreateExercise() {
   const navigate = useNavigate();
-  const user = useUserStore((state) => state.user);
   const {
     register,
     handleSubmit,
@@ -28,12 +25,7 @@ export function CreateExercise() {
     },
     mode: "onBlur",
   });
-
   const onSubmit = async (data: CreateExerciseReq) => {
-    if(user?.role === roleType.USER) {
-        toast.error("You are not a trainer. You cannot create exercises.")
-        return
-    }
     try {
       await api.post("/exercises", data);
       toast.success("Exercise created successfully");
@@ -44,7 +36,6 @@ export function CreateExercise() {
       toast.error("Failed to create exercise");
     }
   };
-
   return (
     <div className="min-h-screen bg-linear-to-b from-[#7f92ff] to-white flex items-center justify-center">
       <ToastContainer autoClose={2000} />

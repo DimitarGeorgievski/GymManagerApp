@@ -4,10 +4,13 @@ import { Link, useSearchParams } from "react-router-dom";
 import { MuscleGroup } from "../../models/exercise.model";
 import { ExerciseCard } from "../../Components/ExerciseCard/ExerciseCard";
 import { SearchInput } from "../../Components/SearchInput/SearchInput";
+import { useUserStore } from "../../store/useUserStore";
+import { roleType } from "../../models/user.model";
 
 document.title = "Exercise";
 export function ExercisePage() {
   const { exercises, fetchExercises } = useExerciseStore();
+  const user = useUserStore((state) => state.user);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("q");
@@ -55,14 +58,16 @@ export function ExercisePage() {
           </select>
           <SearchInput defaultValue={searchQuery} onSearch={onSearch} />
         </div>
-        <Link
-          to={"/exercise/create"}
-          className="bg-blue-500 font-semibold text-white cursor-pointer p-2 rounded"
-        >
-          Create Exercise
-        </Link>
+        {user?.role === roleType.TRAINER || user?.role === roleType.ADMIN && (
+          <Link
+            to={"/exercise/create"}
+            className="bg-blue-500 font-semibold text-white cursor-pointer p-2 rounded"
+          >
+            Create Exercise
+          </Link>
+        )}
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-3 gap-4">
         {currentExercises?.map((exercise) => (
           <ExerciseCard key={exercise.id} exercise={exercise} />
         ))}

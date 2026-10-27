@@ -14,14 +14,14 @@ import { Food } from './entities/food.entity';
 @Injectable()
 export class FoodService {
   constructor(@InjectRepository(Food) private foodRepo: Repository<Food>) {}
-  async create(createFoodDto: CreateFoodDto) {
+  async create(createFoodDto: CreateFoodDto, userId: string) {
     try {
       const foundFood = await this.findOneByName(createFoodDto.name);
       if (foundFood)
         throw new BadRequestException('Food with this title already exists');
       const newFood = await this.foodRepo.save({
         ...createFoodDto,
-        userId: { id: createFoodDto.userId },
+        userId: { id: userId },
       });
       return newFood;
     } catch (error) {
@@ -72,7 +72,6 @@ export class FoodService {
       Object.assign(foundFood, data);
       await this.foodRepo.save({
         ...data,
-        userId: { id: data.userId },
       });
     } catch (error) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
