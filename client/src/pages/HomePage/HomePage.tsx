@@ -22,10 +22,10 @@ export function HomePage() {
     fetchPlans();
     fetchExercises();
   }, [fetchTodaysWorkout, fetchWeeklyWorkouts, fetchTodaysNutrition, fetchPlans, fetchExercises]);
-  const totalCalories = todaysNutrition?.reduce((sum, f) => sum + (f.calories || 0), 0) || 0;
-  const totalProtein = todaysNutrition?.reduce((sum, f) => sum + (f.protein || 0), 0) || 0;
-  const totalCarbs = todaysNutrition?.reduce((sum, f) => sum + (f.carbs || 0), 0) || 0;
-  const totalFats = todaysNutrition?.reduce((sum, f) => sum + (f.fats || 0), 0) || 0;
+  const totalCalories = todaysNutrition?.reduce((sum, f) => sum + Number(f.calories || 0), 0) || 0;
+  const totalProtein = todaysNutrition?.reduce((sum, f) => sum + Number(f.protein || 0), 0) || 0;
+  const totalCarbs = todaysNutrition?.reduce((sum, f) => sum + Number(f.carbs || 0), 0) || 0;
+  const totalFats = todaysNutrition?.reduce((sum, f) => sum + Number(f.fats || 0), 0) || 0;
   const activePlan = plans?.find((plan) => {
     const start = new Date(plan.startDate);
     const end = new Date(plan.endDate);
