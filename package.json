@@ -1,10 +1,19 @@
 {
   "name": "gymmanagerapp",
   "scripts": {
-    "start": "docker-compose -f docker-compose.yaml up",
-    "start:dev": "docker-compose -f docker-compose.dev.yaml up --build",
-    "stop": "docker-compose -f docker-compose.yaml down",
-    "stop:dev": "docker-compose -f docker-compose.dev.yaml down",
-    "stop:clean": "docker-compose -f docker-compose.dev.yaml down -v"
+    "dev": "docker-compose -f docker-compose.dev.yaml up --build",
+    "dev:up": "docker-compose -f docker-compose.dev.yaml up -d",
+    "dev:down": "docker-compose -f docker-compose.dev.yaml down",
+    "dev:logs": "docker-compose -f docker-compose.dev.yaml logs -f",
+    "dev:restart": "docker-compose -f docker-compose.dev.yaml restart",
+    "prod": "docker-compose -f docker-compose.yaml up --build",
+    "prod:up": "docker-compose -f docker-compose.yaml up -d --build",
+    "prod:down": "docker-compose -f docker-compose.yaml down",
+    "prod:logs": "docker-compose -f docker-compose.yaml logs -f",
+    "prod:restart": "docker-compose -f docker-compose.yaml restart",
+    "build": "docker-compose -f docker-compose.yaml build",
+    "build:dev": "docker-compose -f docker-compose.dev.yaml build",
+    "clean": "docker-compose -f docker-compose.dev.yaml down -v && docker-compose -f docker-compose.yaml down -v",
+    "clean:all": "docker system prune -a --volumes -f"
   }
 }
