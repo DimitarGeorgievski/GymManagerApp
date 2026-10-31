@@ -24,7 +24,7 @@ export class FoodService {
         userId: { id: userId },
       });
       return newFood;
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException(
           'Food with these informations already exist',
@@ -58,12 +58,12 @@ export class FoodService {
   }
   async findOneByName(name: string) {
     const foundFood = await this.foodRepo.findOne({
-      where: {name},
+      where: { name },
       relations: {
-        userId: true
-      }
-    })
-    return foundFood || null
+        userId: true,
+      },
+    });
+    return foundFood || null;
   }
 
   async update(id: string, data: UpdateFoodDto) {
@@ -73,7 +73,7 @@ export class FoodService {
       await this.foodRepo.save({
         ...data,
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException('Got Issue with updating this Food');
       throw new InternalServerErrorException(error.message);
