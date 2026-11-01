@@ -59,11 +59,13 @@ export class FoodService {
   async findOneByName(name: string) {
     const foundFood = await this.foodRepo.findOne({
       where: { name },
-      relations: {
-        userId: true,
-      },
     });
     return foundFood || null;
+  }
+  async findByUser(userId: string) {
+    return this.foodRepo.find({
+      where: { userId: { id: userId } },
+    });
   }
 
   async update(id: string, data: UpdateFoodDto) {

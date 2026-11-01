@@ -32,6 +32,8 @@ export interface User {
   foods: Food[];
   plans: Plans[];
   workouts: Workout[];
+  trainer?: User;
+  clients?: User[];
 }
 export enum roleType {
   USER = "USER",
@@ -43,14 +45,42 @@ export enum Gender {
   FEMALE = "female",
 }
 export interface Plans {
+  id: string;
   title: string;
   description: string;
   startDate: Date;
   endDate: Date;
 }
 export interface Workout {
+  id: string;
   title: string;
   description: string;
   durationMinutes: number;
   date: Date;
+  workoutExercises?: WorkoutExercise[];
+}
+export interface WorkoutExercise {
+  id: string;
+  sets: number;
+  reps: number;
+  exercise: Exercise;
+}
+export interface Exercise {
+  id: string;
+  name: string;
+  description: string;
+  muscleGroup: string;
+  difficulty: string;
+  equipment: string;
+  createdBy?: User;
+}
+export interface TrainerSwitchRequest {
+  id: string;
+  user: User;
+  requestedTrainer: User;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  requestedByRole: 'USER' | 'TRAINER' | 'ADMIN';
+  createdAt: Date;
+  decidedAt?: Date;
+  decidedBy?: User;
 }

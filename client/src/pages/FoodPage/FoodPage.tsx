@@ -27,10 +27,8 @@ export function FoodPage() {
     [setSearchParams],
   );
   useEffect(() => {
-    if (!foods?.length) {
-      fetchFoods();
-    }
-  }, [fetchFoods, foods?.length]);
+    fetchFoods();
+  }, [fetchFoods]);
   return (
     <div className="p-12">
       <h1 className="text-center text-3xl font-bold pb-12">Food Page</h1>
@@ -63,7 +61,7 @@ export function FoodPage() {
           <button
             key={i}
             onClick={() => setCurrentPage(i + 1)}
-            className={`px-3 py-1 border rounded ${
+            className={`px-3 py-1 border rounded cursor-pointer ${
               currentPage === i + 1 ? "bg-blue-500 text-white" : ""
             }`}
           >

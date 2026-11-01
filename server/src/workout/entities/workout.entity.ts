@@ -15,25 +15,27 @@ import {
 export class Workout {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   title: string;
-  @Column()
+  @Column({ type: 'text' })
   description: string;
-  @Column({
-    name: 'duration_minutes',
-  })
+  @Column({ type: 'integer', name: 'duration_minutes' })
   durationMinutes: number;
-  @Column()
+  @Column({ type: 'date' })
   date: Date;
   @CreateDateColumn({
     name: 'created_at',
+    type: 'timestamp',
+    precision: 6,
   })
   createdAt: Date;
   @UpdateDateColumn({
     name: 'updated_at',
+    type: 'timestamp',
+    precision: 6,
   })
   updatedAt: Date;
-  @ManyToOne(() => User, (user) => user.workouts)
+  @ManyToOne(() => User, { nullable: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   userId: User;
   @OneToMany(() => WorkoutExercise, (we) => we.workout, { cascade: true })

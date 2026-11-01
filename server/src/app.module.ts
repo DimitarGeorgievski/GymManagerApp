@@ -10,6 +10,7 @@ import { WorkoutModule } from './workout/workout.module';
 import { WorkoutExercisesModule } from './workout-exercises/workout-exercises.module';
 import { FoodModule } from './food/food.module';
 import { PlansModule } from './plans/plans.module';
+import { TrainerRequestsModule } from './trainer-requests/trainer-requests.module';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 
@@ -32,6 +33,7 @@ import { DatabaseModule } from './database/database.module';
     WorkoutExercisesModule,
     FoodModule,
     PlansModule,
+    TrainerRequestsModule,
     AuthModule,
   ],
   controllers: [AppController],

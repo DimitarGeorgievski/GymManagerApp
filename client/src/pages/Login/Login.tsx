@@ -45,7 +45,7 @@ export function Login() {
   return (
     <div className="min-h-screen bg-linear-to-b from-[#7f92ff] to-white flex items-center justify-center">
       <ToastContainer
-        position="top-center"
+        position="top-right"
         autoClose={2000}
         closeOnClick
         draggable

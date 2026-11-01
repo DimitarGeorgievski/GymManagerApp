@@ -26,7 +26,7 @@ export class WorkoutExercisesService {
         exercise: { id: createData.exerciseId },
       });
       return newWorkout;
-    } catch (error) {
+    } catch (error:any) {
       console.log(error)
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException(
@@ -56,7 +56,7 @@ export class WorkoutExercisesService {
         workout: { id: data.workoutId },
         exercise: { id: data.exerciseId },
       });
-    } catch (error) {
+    } catch (error:any) {
       if (error.code === DuplicateCodes.DUPLICATE_PG_CODE)
         throw new BadRequestException(
           'Got Issue with updating this workout exercise',
@@ -69,5 +69,18 @@ export class WorkoutExercisesService {
     if (!foundWorkoutExercise)
       throw new NotFoundException('workout exercise not Found');
     return this.workoutExerciseRepo.remove(foundWorkoutExercise);
+  }
+  async findByUser(userId: string) {
+    return this.workoutExerciseRepo.find({
+      where: {
+        workout: {
+          userId: { id: userId },
+        },
+      },
+      relations: {
+        workout: true,
+        exercise: true,
+      },
+    });
   }
 }

@@ -26,9 +26,9 @@ export class AuthService {
     await this.usersService.create(userData);
   }
   async loginUser(crednetials: CredentialsDto) {
-    const foundUser = await this.usersService.findOneByEmail(crednetials.email);
-    console.log('Login email:', crednetials.email);
-    console.log('User found:', !!foundUser);
+    const foundUser = await this.usersService.findOneByEmail(
+      crednetials.email,
+    );
     if (!foundUser) throw new UnauthorizedException('invalid credentials');
     const isPasswordValid = await compare(
       crednetials.password,

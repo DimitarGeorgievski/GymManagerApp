@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store/useUserStore";
+import { roleType } from "../../models/user.model";
 
 export function Header() {
   const user = useUserStore((state) => state.user);
@@ -27,6 +28,21 @@ export function Header() {
         <li>
           <Link to={"/workout"}>Workout</Link>
         </li>
+        {user?.role === roleType.USER && (
+          <>
+            <li>
+              <Link to={"/find-trainer"}>Find Trainer</Link>
+            </li>
+            <li>
+              <Link to={"/my-trainer"}>My Trainer</Link>
+            </li>
+          </>
+        )}
+        {(user?.role === roleType.TRAINER || user?.role === roleType.ADMIN) && (
+          <li>
+            <Link to={"/trainer/dashboard"}>Trainer Dashboard</Link>
+          </li>
+        )}
       </ul>
       <div className="flex pr-12">
         <p className="pr-6">Hello, {user?.firstName}</p>

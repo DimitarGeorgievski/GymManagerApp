@@ -56,7 +56,6 @@ export function Register() {
         role: data?.role,
       };
       const response = await api.post("/auth/register", newUser);
-      console.log(response);
       const { user } = response.data;
       toast.success("Successfully registered");
       navigate("/");

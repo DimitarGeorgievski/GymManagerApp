@@ -13,27 +13,30 @@ import {
 export class Plans {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   title: string;
-  @Column()
+  @Column({ type: 'text' })
   description: string;
-  @Column({
-    name: 'start_date',
-  })
+  @Column({ type: 'date', name: 'start_date' })
   startDate: Date;
-  @Column({
-    name: 'end_date',
-  })
+  @Column({ type: 'date', name: 'end_date' })
   endDate: Date;
   @CreateDateColumn({
     name: 'created_at',
+    type: 'timestamp',
+    precision: 6,
   })
   createdAt: Date;
   @UpdateDateColumn({
     name: 'updated_at',
+    type: 'timestamp',
+    precision: 6,
   })
   updatedAt: Date;
-  @ManyToOne(() => User, (user) => user.plans)
+  @ManyToOne(() => User, (user) => user.plans, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
   user: User;
 }

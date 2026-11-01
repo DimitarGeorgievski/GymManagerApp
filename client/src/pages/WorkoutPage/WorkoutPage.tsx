@@ -40,7 +40,7 @@ export function WorkoutPage() {
           <p>Filter By:</p>
           <SearchInput defaultValue={searchQuery} onSearch={onSearch} />
         </div>
-        {user?.role === roleType.TRAINER || user?.role === roleType.ADMIN && (
+        {(user?.role === roleType.TRAINER || user?.role === roleType.ADMIN) && (
           <Link
             to={"/workout/create"}
             className="bg-blue-500 font-semibold text-white cursor-pointer p-2 rounded"
@@ -66,7 +66,7 @@ export function WorkoutPage() {
           <button
             key={i}
             onClick={() => setCurrentPage(i + 1)}
-            className={`px-3 py-1 border rounded ${
+            className={`px-3 py-1 border rounded cursor-pointer ${
               currentPage === i + 1 ? "bg-blue-500 text-white" : ""
             }`}
           >

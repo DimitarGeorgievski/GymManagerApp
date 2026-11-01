@@ -37,29 +37,25 @@ export class UsersService {
     return this.usersRepo.find({});
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, relations?: string[]) {
     try {
       const foundUser = await this.usersRepo.findOneOrFail({
         where: { id },
-        relations: {
-          foods: true,
-          plans: true,
-          workouts: true,
-        },
+        relations: relations
+          ? relations.reduce((acc, r) => ({ ...acc, [r]: true }), {})
+          : undefined,
       });
       return foundUser;
     } catch (error) {
       throw new NotFoundException('User not found');
     }
   }
-  async findOneByEmail(email: string) {
+  async findOneByEmail(email: string, relations?: string[]) {
     return this.usersRepo.findOne({
       where: { email },
-      relations: {
-        foods: true,
-        plans: true,
-        workouts: true,
-      },
+      relations: relations
+        ? relations.reduce((acc, r) => ({ ...acc, [r]: true }), {})
+        : undefined,
     });
   }
   async update(id: string, data: UpdateUserDto) {
@@ -79,14 +75,13 @@ export class UsersService {
     return this.usersRepo.remove(foundUser);
   }
   async saveRefreshToken(id: string, token: string) {
-    const foundUser = await this.findOne(id);
-    foundUser.refreshTokens ??= [];
-    foundUser.refreshTokens.push(token);
-    await this.usersRepo.save(foundUser);
+    const user = await this.findOne(id);
+    const tokens = (user.refreshTokens ?? []).concat(token);
+    await this.usersRepo.update(id, { refreshTokens: tokens });
   }
   async deleteRefreshToken(id: string, token: string) {
-    const foundUser = await this.findOne(id);
-    foundUser.refreshTokens.filter((refreshToken) => refreshToken !== token);
-    await this.usersRepo.save(foundUser);
+    const user = await this.findOne(id);
+    const tokens = (user.refreshTokens ?? []).filter((t) => t !== token);
+    await this.usersRepo.update(id, { refreshTokens: tokens });
   }
 }

@@ -10,7 +10,7 @@ interface ExerciseState {
 export const useExerciseStore = create<ExerciseState>((set) => ({
   exercises: [],
   fetchExercises: async () => {
-    const res = await api.get("/exercises");
+    const res = await api.get("/exercises/my-exercises");
     set({ exercises: res.data });
   },
 }));

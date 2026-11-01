@@ -165,7 +165,7 @@ export function CreateFood() {
           </div>
           <button
             type="submit"
-            className="mt-4 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded font-semibold"
+            className="mt-4 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded font-semibold cursor-pointer"
           >
             Create Food
           </button>

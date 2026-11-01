@@ -13,7 +13,7 @@ import {
 export class Food {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   name: string;
   @Column()
   calories: number;
@@ -31,13 +31,20 @@ export class Food {
   fats: number;
   @CreateDateColumn({
     name: 'created_at',
+    type: 'timestamp',
+    precision: 6,
   })
   createdAt: Date;
   @UpdateDateColumn({
     name: 'updated_at',
+    type: 'timestamp',
+    precision: 6,
   })
   updatedAt: Date;
-  @ManyToOne(() => User, (User) => User.foods)
+  @ManyToOne(() => User, (user) => user.foods, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
   userId: User;
 }

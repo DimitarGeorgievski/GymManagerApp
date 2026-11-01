@@ -271,7 +271,7 @@ export function CreateWorkout() {
                     <button
                       type="button"
                       onClick={() => remove(index)}
-                      className="mt-2 text-red-500 hover:text-red-700 text-sm flex items-center gap-1"
+                      className="mt-2 cursor-pointer text-red-500 hover:text-red-700 text-sm flex items-center gap-1"
                     >
                       <Minus size={16} />
                       Remove Exercise
@@ -282,7 +282,7 @@ export function CreateWorkout() {
               <button
                 type="button"
                 onClick={() => append(defaultExercise)}
-                className="w-full flex items-center justify-center gap-2 text-blue-500 hover:text-blue-700 font-medium py-2 border border-dashed border-blue-500 rounded-lg transition"
+                className="w-full flex items-center cursor-pointer justify-center gap-2 text-blue-500 hover:text-blue-700 font-medium py-2 border border-dashed border-blue-500 rounded-lg transition"
               >
                 <Plus size={18} />
                 Add Exercise
@@ -296,14 +296,14 @@ export function CreateWorkout() {
           </div>
           <button
             type="submit"
-            className="mt-3 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg font-semibold transition"
+            className="mt-3 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg font-semibold transition"
           >
             Create Workout
           </button>
           <button
             type="button"
             onClick={() => navigate("/workout")}
-            className="text-gray-500 hover:text-gray-700 font-medium transition"
+            className="text-gray-500 cursor-pointer hover:text-gray-700 font-medium transition"
           >
             Cancel
           </button>

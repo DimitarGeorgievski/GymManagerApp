@@ -9,7 +9,14 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiParam,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { FoodService } from './food.service';
 import { CreateFoodDto } from './dto/create-food.dto';
 import { UpdateFoodDto } from './dto/update-food.dto';
@@ -29,25 +36,42 @@ export class FoodController {
   @ApiOperation({ summary: 'Create a new food entry' })
   @ApiResponse({ status: 201, description: 'Food created successfully' })
   @ApiResponse({ status: 400, description: 'Validation error' })
-  @ApiResponse({ status: 403, description: 'Forbidden - requires USER, TRAINER, or ADMIN role' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - requires USER, TRAINER, or ADMIN role',
+  })
   @ApiBody({ type: CreateFoodDto })
   create(@Body() createFoodDto: CreateFoodDto, @Req() req) {
-    return this.foodService.create(createFoodDto, req.user.id);
+    return this.foodService.create(createFoodDto, req.user.userId);
   }
-  @Roles(roleType.USER, roleType.ADMIN, roleType.TRAINER)
+  @Roles(roleType.ADMIN)
   @Get()
-  @ApiOperation({ summary: 'Get all food entries for authenticated user' })
-  @ApiResponse({ status: 200, description: 'List of food entries' })
-  @ApiResponse({ status: 403, description: 'Forbidden - requires USER, TRAINER, or ADMIN role' })
+  @ApiOperation({ summary: 'Get all food entries (admin only)' })
+  @ApiResponse({ status: 200, description: 'List of all food entries' })
+  @ApiResponse({ status: 403, description: 'Forbidden - requires ADMIN role' })
   findAll() {
     return this.foodService.findAll();
+  }
+  @Roles(roleType.USER, roleType.TRAINER, roleType.ADMIN)
+  @Get('/my-foods')
+  @ApiOperation({ summary: 'Get food entries for current user' })
+  @ApiResponse({ status: 200, description: 'User food entries' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - requires USER, TRAINER, or ADMIN role',
+  })
+  findMyFoods(@Req() req) {
+    return this.foodService.findByUser(req.user.userId);
   }
 
   @Roles(roleType.USER, roleType.ADMIN, roleType.TRAINER)
   @Get(':id')
   @ApiOperation({ summary: 'Get food entry by ID' })
   @ApiResponse({ status: 200, description: 'Food entry found' })
-  @ApiResponse({ status: 403, description: 'Forbidden - requires USER, TRAINER, or ADMIN role' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - requires USER, TRAINER, or ADMIN role',
+  })
   @ApiResponse({ status: 404, description: 'Food entry not found' })
   @ApiParam({ name: 'id', description: 'Food entry ID' })
   findOne(@Param('id') id: string) {
@@ -55,17 +79,25 @@ export class FoodController {
   }
   @Roles(roleType.USER, roleType.ADMIN, roleType.TRAINER)
   @Get('/nutrition/today')
-  @ApiOperation({ summary: 'Get today\'s nutrition summary for authenticated user' })
-  @ApiResponse({ status: 200, description: 'Today\'s nutrition summary' })
-  @ApiResponse({ status: 403, description: 'Forbidden - requires USER, TRAINER, or ADMIN role' })
+  @ApiOperation({
+    summary: "Get today's nutrition summary for authenticated user",
+  })
+  @ApiResponse({ status: 200, description: "Today's nutrition summary" })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - requires USER, TRAINER, or ADMIN role',
+  })
   getTodaysNutrition(@Req() req) {
-    return this.foodService.getTodaysNutrition(req.user.id);
+    return this.foodService.getTodaysNutrition(req.user.userId);
   }
   @Roles(roleType.USER, roleType.ADMIN, roleType.TRAINER)
   @Get('/name/:name')
   @ApiOperation({ summary: 'Get food entry by name' })
   @ApiResponse({ status: 200, description: 'Food entry found' })
-  @ApiResponse({ status: 403, description: 'Forbidden - requires USER, TRAINER, or ADMIN role' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - requires USER, TRAINER, or ADMIN role',
+  })
   @ApiResponse({ status: 404, description: 'Food entry not found' })
   @ApiParam({ name: 'name', description: 'Food name' })
   findOneByName(@Param('name') name: string) {
@@ -76,7 +108,10 @@ export class FoodController {
   @ApiOperation({ summary: 'Update food entry' })
   @ApiResponse({ status: 200, description: 'Food entry updated successfully' })
   @ApiResponse({ status: 400, description: 'Validation error' })
-  @ApiResponse({ status: 403, description: 'Forbidden - requires TRAINER or ADMIN role' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - requires TRAINER or ADMIN role',
+  })
   @ApiResponse({ status: 404, description: 'Food entry not found' })
   @ApiParam({ name: 'id', description: 'Food entry ID' })
   @ApiBody({ type: UpdateFoodDto })
@@ -87,7 +122,10 @@ export class FoodController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete food entry' })
   @ApiResponse({ status: 200, description: 'Food entry deleted successfully' })
-  @ApiResponse({ status: 403, description: 'Forbidden - requires USER, TRAINER, or ADMIN role' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - requires USER, TRAINER, or ADMIN role',
+  })
   @ApiResponse({ status: 404, description: 'Food entry not found' })
   @ApiParam({ name: 'id', description: 'Food entry ID' })
   remove(@Param('id') id: string) {

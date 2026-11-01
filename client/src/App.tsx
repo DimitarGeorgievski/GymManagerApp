@@ -14,6 +14,10 @@ import { CreateExercise } from "./pages/CreateExercisePage/CreateExercisePage";
 import { CreateFood } from "./pages/CreateFoodPage/CreateFoodPage";
 import { CreatePlan } from "./pages/CreatePlanPage/CreatePlanPage";
 import { CreateWorkout } from "./pages/CreateWorkoutPage/CreateWorkoutPage";
+import { FindTrainer } from "./pages/FindTrainerPage/FindTrainerPage";
+import { MyTrainer } from "./pages/MyTrainerPage/MyTrainerPage";
+import { TrainerDashboard } from "./pages/TrainerDashboardPage/TrainerDashboardPage";
+import { ClientDetail } from "./pages/ClientDetailPage/ClientDetailPage";
 
 function App() {
   return (
@@ -41,6 +45,10 @@ function App() {
           <Route path="/plan/create" element={<CreatePlan />} />
           <Route path="/workout/create" element={<CreateWorkout />} />
           <Route path="/food/create" element={<CreateFood />} />
+          <Route path="/find-trainer" element={<FindTrainer />} />
+          <Route path="/my-trainer" element={<MyTrainer />} />
+          <Route path="/trainer/dashboard" element={<TrainerDashboard />} />
+          <Route path="/trainer/clients/:clientId" element={<ClientDetail />} />
         </Route>
       </Route>
       <Route path="*" element={<ErrorPage />} />

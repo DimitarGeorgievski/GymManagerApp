@@ -16,7 +16,7 @@ export const useWorkoutStore = create<WorkoutState>((set) => ({
   todayWorkout: null,
   weeklyWorkouts: null,
   fetchWorkouts: async () => {
-    const res = await api.get("/workout");
+    const res = await api.get("/workout/my-workouts");
     set({ workouts: res.data });
   },
   fetchTodaysWorkout: async () => {

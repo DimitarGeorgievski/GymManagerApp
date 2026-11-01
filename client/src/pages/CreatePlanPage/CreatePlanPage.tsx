@@ -155,14 +155,14 @@ export function CreatePlan() {
           </div>
           <button
             type="submit"
-            className="mt-3 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg font-semibold transition"
+            className="mt-3 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg font-semibold transition cursor-pointer"
           >
             Create Plan
           </button>
           <button
             type="button"
             onClick={() => navigate("/plans")}
-            className="text-gray-500 hover:text-gray-700 font-medium transition"
+            className="text-gray-500 hover:text-gray-700 font-medium transition cursor-pointer"
           >
             Cancel
           </button>

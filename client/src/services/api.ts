@@ -1,12 +1,10 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { tokenService } from "./tokenService";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: false,
 });
-
 api.interceptors.request.use((config) => {
   const token = tokenService.getAccessToken();
   if (token) {
@@ -14,41 +12,66 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+const AUTH_ENDPOINTS = ["/auth/login", "/auth/register", "/auth/refresh-token"];
+const refreshState = {
+  isRedirecting: false,
+  refreshPromise: null as Promise<string> | null,
+};
+async function performTokenRefresh(refreshToken: string): Promise<string> {
+  const res = await axios.post(
+    `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
+    null,
+    { headers: { "refresh-token": refreshToken } },
+  );
+  const newAccess = res.headers["access-token"];
+  const newRefresh = res.headers["refresh-token"] ?? refreshToken;
+  if (!newAccess) throw new Error("No access token in response");
+  tokenService.setTokens(newAccess, newRefresh);
+  return newAccess;
+}
 
 api.interceptors.response.use(
   (res) => res,
   async (error) => {
-    const navigate = useNavigate();
     const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const isAuthEndpoint = AUTH_ENDPOINTS.some((ep) =>
+      originalRequest.url?.includes(ep),
+    );
+
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !isAuthEndpoint
+    ) {
       originalRequest._retry = true;
       const refreshToken = tokenService.getRefreshToken();
-      if (!refreshToken) {
+
+      if (!refreshToken && !refreshState.isRedirecting) {
+        refreshState.isRedirecting = true;
         tokenService.clear();
-        navigate("/login");
+        window.location.href = "/login";
         return Promise.reject(error);
       }
       try {
-        const res = await axios.post(
-          `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
-          null,
-          { headers: { "refresh-token": refreshToken } }
-        );
-        const newAccess = res.headers["access-token"];
-        const newRefresh = res.headers["refresh-token"] ?? refreshToken;
-        if (newAccess) {
-          tokenService.setTokens(newAccess, newRefresh);
-          originalRequest.headers["Authorization"] = `Bearer ${newAccess}`;
-          return api(originalRequest);
+        if (!refreshState.refreshPromise) {
+          refreshState.refreshPromise = performTokenRefresh(refreshToken!).finally(() => {
+            refreshState.refreshPromise = null;
+          });
         }
+        const newAccess = await refreshState.refreshPromise;
+        originalRequest.headers["Authorization"] = `Bearer ${newAccess}`;
+        return api(originalRequest);
       } catch (err) {
         console.log(err);
-        tokenService.clear();
-        navigate("/login");
+        if (!refreshState.isRedirecting) {
+          refreshState.isRedirecting = true;
+          tokenService.clear();
+          window.location.href = "/login";
+        }
       }
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 export default api;

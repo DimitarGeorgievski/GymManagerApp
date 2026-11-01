@@ -13,8 +13,7 @@ export const useFoodStore = create<FoodState>((set) => ({
   foods: [],
   todaysNutrition: null,
   fetchFoods: async () => {
-    const res = await api.get("/food");
-    console.log("food", res);
+    const res = await api.get("/food/my-foods");
     set({ foods: res.data });
   },
   fetchTodaysNutrition: async () => {
