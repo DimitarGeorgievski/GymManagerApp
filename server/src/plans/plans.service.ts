@@ -130,7 +130,6 @@ export class PlansService {
     return this.plansRepo.remove(plan);
   }
   async findClientPlans(trainerId: string, clientId: string) {
-    // Single query with JOIN to verify trainer-client relationship and fetch plans
     const plans = await this.plansRepo
       .createQueryBuilder('plan')
       .innerJoin('plan.user', 'client')
@@ -138,7 +137,6 @@ export class PlansService {
       .where('trainer.id = :trainerId', { trainerId })
       .andWhere('client.id = :clientId', { clientId })
       .getMany();
-
     if (!plans.length) {
       const client = await this.userRepo.findOne({
         where: { id: clientId, trainer: { id: trainerId } },
