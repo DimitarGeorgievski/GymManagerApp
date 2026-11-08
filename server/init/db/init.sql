@@ -1,11 +1,5 @@
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-DROP TABLE IF EXISTS "trainer_switch_request" CASCADE;
-DROP TABLE IF EXISTS "workout_exercises" CASCADE;
-DROP TABLE IF EXISTS "workout" CASCADE;
-DROP TABLE IF EXISTS "plans" CASCADE;
-DROP TABLE IF EXISTS "food" CASCADE;
-DROP TABLE IF EXISTS "exercise" CASCADE;
-DROP TABLE IF EXISTS "user" CASCADE;
+
 CREATE TABLE IF NOT EXISTS "user" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     first_name VARCHAR(100) NOT NULL,
@@ -97,18 +91,20 @@ CREATE INDEX IF NOT EXISTS idx_trainer_switch_request_requested_trainer_id
 CREATE INDEX IF NOT EXISTS idx_trainer_switch_request_decided_by
     ON "trainer_switch_request"(decided_by);
 INSERT INTO "user"(first_name, last_name, email, phone_number, password, weight_kg, height_cm, role)
-VALUES
-('Dimitar', 'Georgievski', 'dimitar@example.com', '071123456', '$2b$08$s5zTOtBbLaQy3GgFWhlRze4XPVbaVrNxH63ffFcinc/NbMxSrcBty', 80, 180, 'USER');
+SELECT 'Dimitar', 'Georgievski', 'dimitar@example.com', '071123456', '$2b$08$s5zTOtBbLaQy3GgFWhlRze4XPVbaVrNxH63ffFcinc/NbMxSrcBty', 80, 180, 'USER'
+WHERE NOT EXISTS (SELECT 1 FROM "user" WHERE email = 'dimitar@example.com')
 INSERT INTO "user"(first_name, last_name, email, phone_number, password, weight_kg, height_cm, role)
-VALUES
-('Dimitar1', 'Georgievski', 'dimitar1@example.com', '071123455', '$2b$08$s5zTOtBbLaQy3GgFWhlRze4XPVbaVrNxH63ffFcinc/NbMxSrcBty', 80, 180, 'TRAINER');
+SELECT 'Dimitar1', 'Georgievski', 'dimitar1@example.com', '071123455', '$2b$08$s5zTOtBbLaQy3GgFWhlRze4XPVbaVrNxH63ffFcinc/NbMxSrcBty', 80, 180, 'TRAINER'
+WHERE NOT EXISTS (SELECT 1 FROM "user" WHERE email = 'dimitar1@example.com')
 INSERT INTO "exercise"(name, muscle_group, description)
-VALUES
-('Bench Press', 'chest', 'Bench press description'),
-('Squat', 'legs', 'Squat description');
+SELECT 'Bench Press', 'chest', 'Bench press description'
+WHERE NOT EXISTS (SELECT 1 FROM "exercise" WHERE name = 'Bench Press')
+INSERT INTO "exercise"(name, muscle_group, description)
+SELECT 'Squat', 'legs', 'Squat description'
+WHERE NOT EXISTS (SELECT 1 FROM "exercise" WHERE name = 'Squat')
 INSERT INTO "workout"(title, description, duration_minutes, date, user_id)
-SELECT 'Morning Workout', 'Chest and legs workout', 60, CURRENT_DATE, id FROM "user" LIMIT 1;
+SELECT 'Morning Workout', 'Chest and legs workout', 60, CURRENT_DATE, id FROM "user" WHERE NOT EXISTS (SELECT 1 FROM "workout" WHERE title = 'Morning Workout')
 INSERT INTO "plans"(title, description, start_date, end_date, user_id)
-SELECT 'Weight Loss Plan', 'Lose weight in 2 months', CURRENT_DATE, CURRENT_DATE + INTERVAL '60 days', id FROM "user" LIMIT 1;
+SELECT 'Weight Loss Plan', 'Lose weight in 60 days', CURRENT_DATE, CURRENT_DATE + INTERVAL '60 days', id FROM "user" WHERE NOT EXISTS (SELECT 1 FROM "plans" WHERE title = 'Weight Loss Plan')
 INSERT INTO "food"(name, calories, protein, carbs, fats, user_id)
-SELECT 'Chicken Breast', 165, 31, 0, 3.6, id FROM "user" LIMIT 1;
+SELECT 'Chicken Breast', 165, 31, 0, 3.6, id FROM "user" WHERE NOT EXISTS (SELECT 1 FROM "food" WHERE name = 'Chicken Breast');
