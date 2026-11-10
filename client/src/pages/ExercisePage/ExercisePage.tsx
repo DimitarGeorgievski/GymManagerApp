@@ -65,11 +65,15 @@ export function ExercisePage() {
           </Link>
         )}
       </div>
-      <div className="grid grid-cols-3 gap-4">
-        {currentExercises?.map((exercise) => (
-          <ExerciseCard key={exercise.id} exercise={exercise} />
-        ))}
-      </div>
+      <div className={`${currentExercises.length >= 1 ? `grid grid-cols-3 gap-4` : ''}`}>
+              {currentExercises.length >= 1 ? (
+                currentExercises.map((exercise) => (
+                  <ExerciseCard key={exercise.id} exercise={exercise} />
+                ))
+              ) : (
+                <h1 className="font-bold text-2xl text-center">You don't have any exercise available.</h1>
+              )}
+            </div>
       <div className="flex justify-center gap-2 mt-6">
         <button
           disabled={currentPage === 1}

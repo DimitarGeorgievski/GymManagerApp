@@ -44,11 +44,15 @@ export function FoodPage() {
           Create Food
         </Link>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {currentFoods.map((food) => (
-          <FoodCard key={food.name} food={food} />
-        ))}
-      </div>
+      <div className={`${currentFoods.length >= 1 ? `grid grid-cols-3 gap-4` : ''}`}>
+              {currentFoods.length >= 1 ? (
+                currentFoods.map((food) => (
+                  <FoodCard key={food.id} food={food} />
+                ))
+              ) : (
+                <h1 className="font-bold text-2xl text-center">You don't have any food available.</h1>
+              )}
+            </div>
       <div className="flex justify-center gap-2 mt-6">
         <button
           disabled={currentPage === 1}

@@ -49,10 +49,14 @@ export function WorkoutPage() {
           </Link>
         )}
       </div>
-      <div className="grid grid-cols-3 gap-4">
-        {currentWorkouts?.map((workout) => (
-          <WorkoutCard key={workout.id} workout={workout} />
-        ))}
+      <div className={`${currentWorkouts.length >= 1 ? `grid grid-cols-3 gap-4` : ''}`}>
+        {currentWorkouts.length >= 1 ? (
+          currentWorkouts.map((workout) => (
+            <WorkoutCard key={workout.id} workout={workout} />
+          ))
+        ) : (
+          <h1 className="font-bold text-2xl text-center">You don't have any workout available.</h1>
+        )}
       </div>
       <div className="flex justify-center gap-2 mt-6">
         <button

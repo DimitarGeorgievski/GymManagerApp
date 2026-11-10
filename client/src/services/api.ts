@@ -18,11 +18,9 @@ const refreshState = {
   refreshPromise: null as Promise<string> | null,
 };
 async function performTokenRefresh(refreshToken: string): Promise<string> {
-  const res = await axios.post(
-    `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
-    null,
-    { headers: { "refresh-token": refreshToken } },
-  );
+  const res = await api.post("/auth/refresh-token", null, {
+    headers: { "refresh-token": refreshToken },
+  });
   const newAccess = res.headers["access-token"];
   const newRefresh = res.headers["refresh-token"] ?? refreshToken;
   if (!newAccess) throw new Error("No access token in response");
@@ -40,6 +38,7 @@ api.interceptors.response.use(
 
     if (
       error.response?.status === 401 &&
+      originalRequest &&
       !originalRequest._retry &&
       !isAuthEndpoint
     ) {
@@ -54,7 +53,9 @@ api.interceptors.response.use(
       }
       try {
         if (!refreshState.refreshPromise) {
-          refreshState.refreshPromise = performTokenRefresh(refreshToken!).finally(() => {
+          refreshState.refreshPromise = performTokenRefresh(
+            refreshToken!,
+          ).finally(() => {
             refreshState.refreshPromise = null;
           });
         }

@@ -49,11 +49,15 @@ export function PlanPage() {
           </Link>
         )}
       </div>
-      <div className="grid grid-cols-3 gap-4">
-        {currentPlans?.map((plan) => (
-          <PlanCard key={plan.id} plan={plan} />
-        ))}
-      </div>
+      <div className={`${currentPlans.length >= 1 ? `grid grid-cols-3 gap-4` : ''}`}>
+              {currentPlans.length >= 1 ? (
+                currentPlans.map((plan) => (
+                  <PlanCard key={plan.id} plan={plan} />
+                ))
+              ) : (
+                <h1 className="font-bold text-2xl text-center">You don't have any plan available.</h1>
+              )}
+            </div>
       <div className="flex justify-center gap-2 mt-6">
         <button
           disabled={currentPage === 1}
